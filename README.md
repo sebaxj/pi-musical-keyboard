@@ -4,7 +4,7 @@
 TODO:
 
 1) Figure out how to play different notes using the audio jack on the Pi
-2) Adjust keyboard module to correlate scancode to sepcific note to be played
+2) Adjust keyboard module to correlate scancode to specific note to be played
 3) Create graphical interface of a 1-octave piano
 
 
@@ -30,8 +30,10 @@ P           0x19        F#
 ## Project title
 
 ## Team members
+Sebastian Xavier James - Isma Lemhadri 
 
 ## Project description
+We aim to make a musical piano keyboard, where we could play the 12 keys of one octave on specific keys of the keyboard. 
 
 ## Member contribution
 A short description of the work performed by each member of the team.
