@@ -31,6 +31,11 @@ F#	369,994		2,525825707	10.100001101001110010000011
 G	391,995		2,6760192	10.101011010000111110011000
 G#	415,305		2,8351488	10.110101011100110001001111
 
+NEXT STEP: 
+- Musical keyboard : note is played while key is pressed, stops when key is released (will probably need to modify audio.c, since the audio write functions loop indefinitely now). 
+- Graphical interface. 
+
+
 Key-to-Note Mapping:
 
 Keyboard:   Scancode:   Frequency:
