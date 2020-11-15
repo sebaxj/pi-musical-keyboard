@@ -8,11 +8,19 @@ FILE STRUCTURE: app is musical_ps2_keyboard.c
 TODO:
 
 1) Figure out how to play different notes using the audio jack on the Pi. DONE (try out play.c in src/apps with the different phases). 
-2) Adjust keyboard module to correlate scancode to specific note to be played
+2) Adjust keyboard module to correlate scancode to specific note to be played. "music command"
+3) modify audio.c to play notes and stop notes. 
 3) Create graphical interface of a 1-octave piano
+
+
 4) We should set a function which does that the conversion for a given frequency : 
 I'm trying to understand how to deal with fractions in c (floats) and convert it to a binary fraction. 
 5) Waiting to figure out how to do that, there are online converters : https://www.exploringbinary.com/binary-converter/
+
+Milestones: 
+- Keyboard driver: => KEY-Press of the associated keys would like output the sound, and a KEY release would stop it. Sebastian 
+- Command on the shell : "music" => displays the piano graphic and change the keyboard accordingly. Isma
+
 
 How to play different notes: 
 - Figure out the frequency for each note. 
