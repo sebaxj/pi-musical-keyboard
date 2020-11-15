@@ -1,5 +1,5 @@
-#ifndef AUDIO_H_INCLUDED
-#define AUDIO_H_INCLUDED
+#ifndef AUDIO_H
+#define AUDIO_H
 
 #include <stdint.h>
 
