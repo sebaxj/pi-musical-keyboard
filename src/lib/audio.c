@@ -18,7 +18,6 @@
 #include "gpio.h"
 #include "timer.h"
 #include "audio.h"
-#include "mcp3008.h"
 #include "printf.h"
 #include "filters.h"
 #include "pwm.h"
