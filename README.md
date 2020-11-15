@@ -7,7 +7,7 @@ FILE STRUCTURE: app is musical_ps2_keyboard.c
 
 TODO:
 
-1) Figure out how to play different notes using the audio jack on the Pi
+1) Figure out how to play different notes using the audio jack on the Pi. DONE (try out play.c in src/apps with the different phases). 
 2) Adjust keyboard module to correlate scancode to specific note to be played
 3) Create graphical interface of a 1-octave piano
 4) We should set a function which does that the conversion for a given frequency : 
@@ -16,11 +16,10 @@ I'm trying to understand how to deal with fractions in c (floats) and convert it
 
 How to play different notes: 
 - Figure out the frequency for each note. 
-- Solve for x : Frequency = 9,600,000/ (256 * 256) 
+- Solve for x : Frequency = x.(9,600,000/ (256 * 256))
 - Convert the x in a binary fraction 
-- Left shift it the right amount so that the integer part end at the 8 MSB bits of PHASE. 
 
-| Keyboard | Scancode | Note Name | Frequency (Hz) | Phase       | Phase as Binary Function    |
+| Keyboard | Scancode | Note Name | Frequency (Hz) | Phase       | Phase as Binary Fraction    |
 |----------|----------|-----------|----------------|-------------|-----------------------------|
 | Q        | 0x10     | A         | 220.000        | 1.50186667  | 1.100000000111101001010101  |
 | W        | 0x11     | A#        | 233.082        | 1.59117312  | 1.100101110101011100011111  |
