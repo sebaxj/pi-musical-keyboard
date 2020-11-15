@@ -1,5 +1,10 @@
 # slemhadri-sebaxj-project
 
+FILE STRUCTURE: app is musical_ps2_keyboard.c
+ - use audio driver to control audio output with PWN through audio jack
+ - use keyboard driver to initiate notes
+ - use graphic modules to display piano graphic on console with a shell to select intruments, etc. 
+
 TODO:
 
 1) Figure out how to play different notes using the audio jack on the Pi
