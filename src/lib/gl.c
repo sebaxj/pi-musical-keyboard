@@ -1,108 +1,124 @@
 #include "gl.h"
+#include "fb.h"
 #include "font.h"
-#include "malloc.h"
+#include "printf.h"
+#include "fb_ref.h"
+
+static gl_mode_t mode_used; 
 
 void gl_init(unsigned int width, unsigned int height, gl_mode_t mode)
 {
     fb_init(width, height, 4, mode);    // use 32-bit depth always for graphics library
+    mode_used = mode; 
 }
 
 void gl_swap_buffer(void)
 {
-    fb_swap_buffer();
+    fb_swap_buffer(); 
 }
 
 unsigned int gl_get_width(void)
 {
-    return fb_get_width();
+    return fb_get_width(); 
 }
 
 unsigned int gl_get_height(void)
 {
-    return fb_get_height();
+    return fb_get_height(); 
 }
 
 color_t gl_color(unsigned char r, unsigned char g, unsigned char b)
 {
-    unsigned char color_arr[4] = {b, g, r, 0xff};
-    int color = 0;
-    for(int i = 0; i < 4; i++) {
-        color = (color & ~(0xFF << (i << 3))) | (((int)color_arr[i]) << (i << 3));
-    }
-
-    return color;
+    color_t color = 0; 
+    color |= 0xff << 24; 
+    color |= r << 16; 
+    color |= g << 8; 
+    color |= b; 
+    return color; 
 }
 
 void gl_clear(color_t c)
 {
-    for(int x = 0; x < fb_get_width(); x++) {
-        for(int y = 0; y < fb_get_height(); y++) {
-            gl_draw_pixel(x, y, c);
-        }
-    }
-}
-
+    // clear 2_d 
+       	unsigned int row_len = fb_get_pitch()/sizeof(unsigned int); 
+	unsigned int (*im)[row_len] = fb_get_draw_buffer();  
+	for (int y=0; y < fb_get_height(); y++){ 
+       	 	for (int x=0; x < row_len; x++){
+            		im[y][x] = c; 
+        	} 
+    	} 
+} 
+   
+	
 void gl_draw_pixel(int x, int y, color_t c)
 {
-    if(x < fb_get_width() && y < fb_get_height() && x >= 0 && y >= 0) {
-        unsigned int per_row = fb_get_pitch() / fb_get_depth(); // length of row with padding
-        unsigned int (*ptr)[per_row] = fb_get_draw_buffer();
-        ptr[y][x] = c;
-    }
+    unsigned int row_len = fb_get_pitch()/sizeof(unsigned int); 
+    unsigned int (*im)[row_len] = fb_get_draw_buffer(); 
+    if ((x < fb_get_width()) && (x >= 0) && (y >= 0) && (y < fb_get_height())) { 
+    	    im[y][x] = c; 
+	    //for (int i = 0; i < row_len; i++){
+	//	    im[y][i] = c; 
+	    //} 
+    } 
 }
 
 color_t gl_read_pixel(int x, int y)
 {
-    if(x < fb_get_width() && y < fb_get_height() && x >= 0 && y >= 0) {
-        unsigned int per_row = fb_get_pitch() / fb_get_depth(); // length of row with padding
-        unsigned int (*ptr)[per_row] = fb_get_draw_buffer();
-        return ptr[y][x];
-    }
-    return 0;
+    unsigned int row_len = fb_get_pitch()/sizeof(unsigned int); 
+    unsigned int (*im)[row_len] = fb_get_draw_buffer(); 
+    if (x < fb_get_width()&& x >= 0 && y >= 0 && y < fb_get_height()) { 
+        return im[y][x];
+    } 
+    return 0; 
 }
 
 void gl_draw_rect(int x, int y, int w, int h, color_t c)
 {
-    for(int j = x; j < x + w; j++) {
-        for(int i = y; i < y + h; i++) {
-            gl_draw_pixel(j, i, c);
-        }
-    }
+    int w_rec = (w < fb_get_width()-x) ? w : (fb_get_width()-x); 
+    int h_rec = (h < fb_get_height() - y) ? h : (fb_get_height()-y); 
+    for (int i = 0; i < w_rec; i++) { 
+        for (int j = 0; j < h_rec; j++) { 
+	    gl_draw_pixel(x+i, y+j, c); 
+        } 
+    } 
 }
 
 void gl_draw_char(int x, int y, int ch, color_t c)
 {
-    unsigned int size_of_buf = font_get_height() * font_get_width();
-    unsigned char *buf = malloc(size_of_buf);
-    int index = 0;
-    if(font_get_char(ch, buf, size_of_buf)) {
-        for(int i = y; i < y + font_get_height(); i++) { // buf stores pixels by column first, then row
-            for(int j = x; j < x + font_get_width(); j++) {
-                if(buf[index] == 0xff) {
-                    gl_draw_pixel(j, i, c);
-                }
-                index++;
+    size_t buflen = font_get_size(); 
+    unsigned char buf[buflen]; 
+
+    int proceed = font_get_char(ch, buf, buflen); 
+
+    if (proceed){ 
+	    unsigned int w_char = gl_get_char_width(); 
+	    unsigned int h_char = gl_get_char_height(); 
+	    for (int i = 0; i < w_char; i++){
+		for (int j = 0; j < h_char; j++){
+		    if (buf[i+w_char*j]) {
+			    gl_draw_pixel(x+i, y+j, c); //only draw pixels within the bounds 
+ 	            } 
+                } 
             }
-        }
     }
-    free(buf);
-}
+} 
 
 void gl_draw_string(int x, int y, const char* str, color_t c)
 {
-    while(*str != '\0') {
-        gl_draw_char(x, y, (int)*str, c);
-        x += gl_get_char_width();
-        str++;
+    int count = 0; 
+    unsigned int w_char = gl_get_char_width(); 
+    while (str[count] != '\0') { 
+    	gl_draw_char(x+w_char*count, y, str[count], c); 
+    	count++; 
     }
 }
 
 unsigned int gl_get_char_height(void)
 {
-    return font_get_height();
+    return font_get_height(); 
 }
 
 unsigned int gl_get_char_width(void)
 {
-    return font_get_width();
+    return font_get_width(); 
 }

@@ -2,107 +2,133 @@
 #include <stdarg.h>
 #include "gl.h"
 #include "malloc.h"
-#include "timer.h"
 #include "printf.h"
-
-#define _WIDTH 640
-#define _HEIGHT 512
-#define MAX_BUFFER 160
-#define _NROWS 10
-#define _NCOLS 20
+#include "strings.h"
+#include "timer.h"
 
 static void process_char(char ch);
 
-struct cursor {
-    unsigned int pos_col;
-    unsigned int pos_row;
-};
+static void draw_text(char* text); 
 
-static struct cursor cursor_position;
-static int (*ptr)[_NROWS][_NCOLS];
+//to track cursor's location 
+struct location { 
+	unsigned int x; 
+	unsigned int y; 
+}; 
+
+struct console { 
+	struct location cursor; 
+	char* text; 
+	color_t background; 
+	color_t text_color; 
+	unsigned int n_rows; 
+	unsigned int n_cols;
+}; 
+
+static struct console my_console; 
+
+#define MAX_OUTPUT_LEN 1024 
 
 void console_init(unsigned int nrows, unsigned int ncols)
-{
-    // initialize the cursor position in the top left
-    cursor_position.pos_col = 0;
-    cursor_position.pos_row = 0;
+{    
+    // cursor is in the home position 
+    my_console.cursor.x = 0; 
+    my_console.cursor.y = 0; 
 
-    ptr = malloc(nrows * ncols * sizeof(int));
+    my_console.n_rows = nrows; 
+    my_console.n_cols = ncols; 
 
-    // initialize graphics library
-    gl_init(_WIDTH, _HEIGHT, GL_SINGLEBUFFER);
-    // initialize the 2D array, disp, of size nrows and ncols
-    for(int y = 0; y < gl_get_height(); y += gl_get_char_height()) {
-        for(int x = 0; x < gl_get_width(); x += gl_get_char_width()) {
-            *ptr[y][x] = ' ';
-            gl_draw_char(x, y, *ptr[y][x], GL_BLACK);
-        }
-    }
+    my_console.background = GL_BLUE; 
+    my_console.text_color = GL_BLACK; 
+
+    gl_init(ncols * gl_get_char_width(), nrows * gl_get_char_height(), GL_SINGLEBUFFER);
+
+    gl_clear(my_console.background); 
+
+    my_console.text = malloc(nrows*ncols); 
+    memset(my_console.text, 0x0, nrows*ncols); // text start empty
+    
 }
 
 void console_clear(void)
 {
-    for(int y = 0; y < gl_get_height(); y += gl_get_char_height()) {
-        for(int x = 0; x < gl_get_width(); x += gl_get_char_width()) {
-            *ptr[y][x] = ' ';
-            gl_draw_char(x, y, *ptr[y][x], GL_BLACK);
-        }
-    }
-    gl_clear(GL_BLACK);
-    gl_swap_buffer();
-    cursor_position.pos_col = 0;
-    cursor_position.pos_row = 0;
+    // bring cursor back to home position 
+    my_console.cursor.x = 0; 
+    my_console.cursor.y = 0; 
+
+    gl_clear(my_console.background);
+
+    memset(my_console.text, 0x0, my_console.n_rows * my_console.n_cols); // clear console text  
+    
 }
 
 int console_printf(const char *format, ...)
 {
-    char buffer[MAX_BUFFER];
-    va_list args;
-    va_start(args, format);
-    int size = vsnprintf(buffer, MAX_BUFFER, format, args);
-    va_end(args);
-    int i;
-    for(i = 0; buffer[i] != '\0'; i++) {
-        process_char(buffer[i]);
-    }
-    gl_swap_buffer();
-    return size;
+    char buf[MAX_OUTPUT_LEN];
+    va_list ap; 
+    va_start(ap, format);
+    int result = vsnprintf(buf, MAX_OUTPUT_LEN, format, ap); 
+    va_end(ap); 
+
+    int count = 0; 
+    while(buf[count] != '\0'){ 
+	   process_char(buf[count]); 
+ 	   count++; 
+    }  
+    //printf("%s\n", my_console.text);  
+    return result;
 }
 
-static void process_char(char ch)
+static void process_char(char ch) // horizontal wrapping taken into account 
 {
-    switch(ch) {
-        case '\b': // backspace
-            cursor_position.pos_col -= gl_get_char_width();
-
-            // store current char at cursor position
-            int curr_char =  *ptr[cursor_position.pos_row][cursor_position.pos_col];
-            *ptr[cursor_position.pos_row][cursor_position.pos_col] = curr_char;
-
-            // draw stored character in black to make it "vanish"
-            gl_draw_char(cursor_position.pos_col, cursor_position.pos_row, *ptr[cursor_position.pos_row][cursor_position.pos_col], GL_BLACK);
-            break;
-        case '\r': // carriage return
-            cursor_position.pos_col = 0; 
-            break;
-        case '\n': // new line
-            cursor_position.pos_row += gl_get_char_height();
-            cursor_position.pos_col = 0;
-            break;
-        case '\f': // form feed
-            console_clear();
-            break;
-        default: // ordinary char
-            *ptr[cursor_position.pos_row][cursor_position.pos_col] = (int)ch;
-            gl_draw_char(cursor_position.pos_col, cursor_position.pos_row, *ptr[cursor_position.pos_row][cursor_position.pos_col], GL_AMBER);
-            if(cursor_position.pos_col + (2 * gl_get_char_width()) > gl_get_width()) { // horizontal wrapping
-                cursor_position.pos_row += gl_get_char_height();
-                cursor_position.pos_col = 0;
-            } else if(cursor_position.pos_row + gl_get_char_height() > gl_get_height()) { // vertical scrolling
-                console_clear(); 
-            } else {
-                cursor_position.pos_col += gl_get_char_width();
-            }
-            break;
-    }
+    // if ordinary char: inserts ch into contents at current position
+    // of cursor, cursor advances one position
+    // if special char: (\r \n \f \b) handle according to specific function
+    if (ch == '\b') {
+	    my_console.cursor.x -= gl_get_char_width();  
+	    gl_draw_rect(my_console.cursor.x, my_console.cursor.y, gl_get_char_width(), gl_get_char_height(), my_console.background); 
+    } else if (ch == '\r') { 
+	    my_console.cursor.x = 0; 
+    }else if (ch == '\n') {
+	    my_console.cursor.x = 0; 
+	    my_console.cursor.y += gl_get_char_height(); 
+    } else if (ch == '\f') console_clear();  
+    else { 
+	    if ( (my_console.cursor.x >=  my_console.n_cols*gl_get_char_width()) && (my_console.cursor.y < ((my_console.n_rows - 1) *gl_get_char_height()))) { // horizontal wrapping
+		my_console.cursor.x = 0; 
+		my_console.cursor.y += gl_get_char_height();  
+	    // vertical wrapping 		
+	    } else if (my_console.cursor.y >= my_console.n_rows * gl_get_char_height()){ // return in the middle of a lign
+		    my_console.cursor.x = 0; 
+		    memcpy(my_console.text, my_console.text + my_console.n_cols, my_console.n_cols * (my_console.n_rows -1));
+		    memset(my_console.text + my_console.n_cols * (my_console.n_rows - 1), 0x0, my_console.n_cols); // set last row empty 
+		    draw_text(my_console.text);
+		    my_console.cursor.y -= gl_get_char_height(); 
+	    } else if (my_console.cursor.y == (my_console.n_rows - 1) * gl_get_char_height() && my_console.cursor.x >= my_console.n_cols*gl_get_char_width()){
+		    // vertical wrapping when combined with horizontal wrapping 
+		    my_console.cursor.x = 0; 
+		    memcpy(my_console.text, my_console.text + my_console.n_cols, my_console.n_cols * (my_console.n_rows -1)); 
+		    memset(my_console.text + my_console.n_cols * (my_console.n_rows - 1), 0x0, my_console.n_cols); // set last row empty  
+		    draw_text(my_console.text);
+	    }
+	    gl_draw_rect(my_console.cursor.x, my_console.cursor.y, gl_get_char_width(), gl_get_char_height(), my_console.background); 
+	    gl_draw_char(my_console.cursor.x, my_console.cursor.y, ch, my_console.text_color); 
+	    my_console.text[(my_console.cursor.x)/gl_get_char_width() + my_console.n_cols * (my_console.cursor.y)/gl_get_char_height()] = ch; 
+	    my_console.cursor.x += gl_get_char_width();           
+    } 
 }
+
+static void draw_text(char * text){ 
+	// clear screen without clearing the text
+	gl_draw_rect(0, 0, my_console.n_cols*gl_get_char_width(), my_console.n_rows*gl_get_char_height(), my_console.background); 
+
+	// draw first n-1 cols of text into screen 
+	char (* text_2d)[my_console.n_cols] = (char (*)[my_console.n_cols])text; 
+	for (int i = 0; i< my_console.n_cols; i++){ 
+	    for (int j = 0; j < my_console.n_rows; j++) { 
+	        gl_draw_char(i*gl_get_char_width(), j*gl_get_char_height(), text_2d[j][i], my_console.text_color);
+	    } 
+	}
+	
+} 
+
