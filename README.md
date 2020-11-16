@@ -3,14 +3,14 @@
 Update Monday : 
 - (Isma) I modified the Makefile to make install the app you created. 
 - I modified the musical_ps2_keyboard.c to run the shell with the keyboard.c version with interrupts. 
-- I replaced your : console.c gl.c fb.c gpio_interrupts.c and keyboard.c with mine (I had some trouble running some of your code with some of mine so I replaced it) 
-- When running a file, make sure that you switch the RESET to 0 on keyboard.c (I have a keyboard that needs the reset code). 
-- I added the "music" command in shell.c, for now, draw_piano() just clears the screen.
-- I deleted the files in include that we don't need (they're already in libpi and libpiextra). Also, we need sin8.h in include for now, I added it.  
+- I replaced your : console.c gl.c fb.c gpio_interrupts.c and keyboard.c with mine (I had some trouble running some of your code with some of mine so I replaced it, including the interrupts version) 
+- When running a file, make sure that you switch RESET to 0 on keyboard.c (I have a keyboard that needs the reset code, but it seems like you don't ?). 
+- I've implemented the "music" command in shell.c, for now, draw_piano() just clears the screen, and you can play one of the 12 KEYS (qwertyuiop[]) and it outputs the corresponding note. However, it only works for the first key for now, as the audio_write functions are still looping indefinitely. You can try the new shell with "make install", then typing "music"in the shell, it's supposed to just clear the screen for now (will draw the piano when we implement the graphic part), and waits for you to press one of the appropriate keys. 
+- I deleted the files in include that we don't need (they're already in libpi and libpiextra) in my local repo, however I didn't delete them on the repo so you shouldn't see any change for now. I wasn't sure if you modified some of them or not. 
 
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
- - use keyboard driver to initiate notes
+ - use keyboard driver to initiate notes (shell.c for now). 
  - use graphic modules to display piano graphic on console with a shell to select intruments, etc. 
 
 TODO:
@@ -37,7 +37,7 @@ How to play different notes:
 
 | Keyboard | Scancode | Note Name | Frequency (Hz) | Phase       | Phase as Binary Fraction    |
 |----------|----------|-----------|----------------|-------------|-----------------------------|
-| Q        | 0x15    | A         | 220.000        | 1.50186667  | 1.100000000111101001010101  |
+| Q        | 0x15     | A         | 220.000        | 1.50186667  | 1.100000000111101001010101  |
 | W        | 0x1d     | A#        | 233.082        | 1.59117312  | 1.100101110101011100011111  |
 | E        | 0x24     | B         | 246.942        | 1.68579072  | 1.101011111000111111111011  |
 | R        | 0x2d     | C         | 261.626        | 1.78603349  | 1.110010010011100101111101  |
