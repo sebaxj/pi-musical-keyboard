@@ -6,14 +6,21 @@
 #include "malloc.h"
 #include "pi.h"
 #include "timer.h"
+#include "console.h"
+
 
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define min(x, y) (x < y ? x : y)
+#define ESC_SCANCODE 0x76
 
 #define TESTING_MODE 0 // change to 1 to enable shell.c to run through test array when initializing
 
+
+
 static formatted_fn_t shell_printf;
+
+int cmd_music(int argc, const char *argv[]); 
 
 #if TESTING_MODE
 static const char *tests[9] = {"echo Hello, world!", "", " ", "peek bob", "help", "peek 0xFFFC", "poke 0xFFFC 1", "peek 0xFFFC", "poke 0xF"};
@@ -56,8 +63,19 @@ static const command_t commands[] = {
     {"reboot", "reboot the Raspberry Pi back to the bootloader", cmd_reboot},
     {"peek", "This command takes one argument: [address]. It prints the 4-byte value stored at memory address [address]", cmd_peek},
     {"poke", "This command takes two arguments: [address] [value]. The poke function stores value into the memory at [address]", cmd_poke},
-
+    {"music", "This command turns the keyboard into a musical keyboard", cmd_music} 
 };
+
+int cmd_music(int argc, const char *argv[]){ 
+    draw_piano(); // from console.c
+    while (1) { 
+	    key_action_t action = keyboard_read_sequence(); 
+	    if (action.keycode == ESC_SCANCODE) break; 
+    } 
+    shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
+    return 0; 
+} 
+ 
 
 int cmd_help(int argc, const char *argv[]) 
 {
