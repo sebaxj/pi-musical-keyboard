@@ -7,12 +7,44 @@
 #include "pi.h"
 #include "timer.h"
 #include "console.h"
+#include "audio.h"
+#include "sin8.h"
+#include <stdint.h> 
 
 
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define min(x, y) (x < y ? x : y)
 #define ESC_SCANCODE 0x76
+
+#define PHASE_A 0b1100000000111101001010101
+#define PHASE_A_sharp 0b1100101110101011100011111	
+#define PHASE_B 0b1101011111000111111111011
+#define PHASE_C 0b1110010010011100101111101
+#define PHASE_C_sharp 0b1111001000110100110010011
+#define PHASE_D 0b10000000010011011101111111
+#define PHASE_D_sharp 0b10000111111011101111011101	
+#define PHASE_E 0b10010000000001000100010010
+#define PHASE_F 0b10011000100101000111110110
+#define PHASE_F_sharp 0b10100001101001110010000011
+#define PHASE_G 0b10101011010000111110011000
+#define PHASE_G_sharp 0b10110101011100110001001111
+
+enum musical_keys{ 
+	A_code = 0x15, 
+	Asharp_code = 0x1d, 
+	B_code = 0x24,
+	C_code = 0x2d, 
+	Csharp_code = 0x2c, 
+	D_code = 0x35,
+	Dsharp_code = 0x3c, 
+	E_code = 0x43, 
+	F_code = 0x44, 
+	Fsharp_code = 0x4d,
+	G_code = 0x54,
+	Gsharp_code = 0x5b
+};
+
 
 #define TESTING_MODE 0 // change to 1 to enable shell.c to run through test array when initializing
 
@@ -68,9 +100,48 @@ static const command_t commands[] = {
 
 int cmd_music(int argc, const char *argv[]){ 
     draw_piano(); // from console.c
+    audio_init(); 
     while (1) { 
-	    key_action_t action = keyboard_read_sequence(); 
-	    if (action.keycode == ESC_SCANCODE) break; 
+	    key_action_t action = keyboard_read_sequence();
+	    if (action.keycode == ESC_SCANCODE) break;
+	    switch(action.keycode) { 
+		    case A_code: 
+			    audio_write_u8(sinewave, PHASE_A); 
+			    break; 
+		    case Asharp_code: 
+			    audio_write_u8(sinewave, PHASE_A_sharp); 
+			    break; 
+		    case B_code: 
+			    audio_write_u8(sinewave, PHASE_B); 
+			    break; 
+		    case C_code: 
+			    audio_write_u8(sinewave, PHASE_C); 
+			    break;
+		    case Csharp_code: 
+			    audio_write_u8(sinewave, PHASE_C_sharp); 
+			    break; 
+		    case D_code: 
+			    audio_write_u8(sinewave, PHASE_D); 
+			    break; 
+		    case Dsharp_code: 
+			    audio_write_u8(sinewave, PHASE_D_sharp); 
+			    break; 
+		    case E_code: 
+			    audio_write_u8(sinewave, PHASE_E); 
+			    break;
+		    case F_code: 
+			    audio_write_u8(sinewave, PHASE_F); 
+			    break; 
+		    case Fsharp_code: 
+			    audio_write_u8(sinewave, PHASE_F_sharp); 
+			    break; 
+		    case G_code: 
+			    audio_write_u8(sinewave, PHASE_G); 
+			    break; 
+		    case Gsharp_code: 
+			    audio_write_u8(sinewave, PHASE_G_sharp); 
+			    break; 
+	    } 	    
     } 
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
     return 0; 
