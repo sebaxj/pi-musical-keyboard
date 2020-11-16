@@ -1,10 +1,10 @@
 #include <stdint.h> 
 #include "printf.h"
 #include "uart.h"
-//#include "filters.h"
+#include "filters.h"
 #include "timer.h"
 #include "audio.h"
-#include "sin8.h"
+//#include "sin8.h"
 #include "gpio.h"
 #include "shell.h"
 #include "console.h"
@@ -38,6 +38,7 @@ void main() {
     //audio_write_i16(resampled, PHASE);
     shell_init(console_printf); 
     interrupts_global_enable(); 
+    //audio_init();
     shell_run(); 
     //audio_write_u8(sinewave, PHASE);
 }
