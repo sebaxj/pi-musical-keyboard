@@ -38,7 +38,7 @@ void console_init(unsigned int nrows, unsigned int ncols)
     my_console.n_rows = nrows; 
     my_console.n_cols = ncols; 
 
-    my_console.background = GL_BLUE; 
+    my_console.background = gl_color(0xff, 0xa0, 0x7a); 
     my_console.text_color = GL_BLACK; 
 
     gl_init(ncols * gl_get_char_width(), nrows * gl_get_char_height(), GL_SINGLEBUFFER);
@@ -85,7 +85,12 @@ static void process_char(char ch) // horizontal wrapping taken into account
     // of cursor, cursor advances one position
     // if special char: (\r \n \f \b) handle according to specific function
     if (ch == '\b') {
-	    my_console.cursor.x -= gl_get_char_width();  
+	    if (my_console.cursor.x == 0) { // handling going back to previous line 
+		    my_console.cursor.y -= gl_get_char_height(); 
+		    my_console.cursor.x = (my_console.n_cols - 1) * gl_get_char_width(); 
+	    } else { 
+	    	    my_console.cursor.x -= gl_get_char_width(); 
+	    }  
 	    gl_draw_rect(my_console.cursor.x, my_console.cursor.y, gl_get_char_width(), gl_get_char_height(), my_console.background); 
     } else if (ch == '\r') { 
 	    my_console.cursor.x = 0; 
@@ -128,7 +133,10 @@ static void draw_text(char * text){
 	    for (int j = 0; j < my_console.n_rows; j++) { 
 	        gl_draw_char(i*gl_get_char_width(), j*gl_get_char_height(), text_2d[j][i], my_console.text_color);
 	    } 
-	}
-	
+	}	
+} 
+
+void draw_piano(void){
+	console_clear(); 
 } 
 
