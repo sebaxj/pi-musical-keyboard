@@ -1,5 +1,13 @@
 # slemhadri-sebaxj-project
 
+Update Monday : 
+- (Isma) I modified the Makefile to make install the app you created. 
+- I modified the musical_ps2_keyboard.c to run the shell with the keyboard.c version with interrupts. 
+- I replaced your : console.c gl.c fb.c gpio_interrupts.c and keyboard.c with mine (I had some trouble running some of your code with some of mine so I replaced it) 
+- When running a file, make sure that you switch the RESET to 0 on keyboard.c (I have a keyboard that needs the reset code). 
+- I added the "music" command in shell.c, for now, draw_piano() just clears the screen.
+- I deleted the files in include that we don't need (they're already in libpi and libpiextra). Also, we need sin8.h in include for now, I added it.  
+
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
  - use keyboard driver to initiate notes
