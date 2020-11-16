@@ -1,10 +1,10 @@
 # TODO: replace `<your-project-moduleN>` with the modules that you implement for
 # your project.
-MY_MODULES = console.o fb.o gl.o shell.o keyboard.o  
+MY_MODULES = console.o fb.o gl.o shell.o keyboard.o audio.o
 # module.o 
 
 
-# Paths to binaries.
+# Paths to binariesi.
 # TODO: replace `<your-project-app>` with the name of your project's
 # application (suffix excluded).
 # TODO: replace `<your-project-tests>` with the name of your project's tests
