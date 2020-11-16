@@ -1,8 +1,7 @@
 # TODO: replace `<your-project-moduleN>` with the modules that you implement for
 # your project.
-MY_MODULES = <your-project-module1>.o \
-			 <your-project-module2>.o \
-			 # ...
+MY_MODULES = console.o fb.o gl.o shell.o keyboard.o  
+# module.o 
 
 
 # Paths to binaries.
@@ -10,7 +9,7 @@ MY_MODULES = <your-project-module1>.o \
 # application (suffix excluded).
 # TODO: replace `<your-project-tests>` with the name of your project's tests
 # (suffix excluded).
-APPLICATION = build/bin/<your-project-app>.bin
+APPLICATION = build/bin/musical_p2p_keyboard.bin
 TEST 		= build/bin/<your-project-tests>.bin
 
 # Use order-only prerequisite to create the build directory.
@@ -27,7 +26,7 @@ CFLAGS_EXTRA = -Werror
 CFLAGS 	= -I$(CS107E)/include -Iinclude -Og -g -Wall -std=c99 -ffreestanding $(CFLAGS_EXTRA)
 CFLAGS += -mapcs-frame -fno-omit-frame-pointer -mpoke-function-name -Wpointer-arith
 LDFLAGS	= -nostdlib -T src/boot/memmap -L$(CS107E)/lib
-LDLIBS 	= -lpi -lgcc # TODO: link against any other libraries that you need for your project.
+LDLIBS 	= -lpiextra -lpi -lgcc # TODO: link against any other libraries that you need for your project.
 
 # Search for .c and .s files in the src directory's subdirectories.
 # https://www.cmcrossroads.com/article/basics-vpath-and-vpath
