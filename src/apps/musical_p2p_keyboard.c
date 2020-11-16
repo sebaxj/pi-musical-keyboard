@@ -4,7 +4,6 @@
 #include "filters.h"
 #include "timer.h"
 #include "audio.h"
-//#include "sin8.h"
 #include "gpio.h"
 #include "shell.h"
 #include "console.h"
@@ -24,7 +23,7 @@ void main() {
     //timer_init();
     //mcp3008_init();
     //filters_init();
-    //audio_init();
+    // audio_init();
     //audio_send_waveform(&filters_reverb_wrapper,50000);
     //audio_send_filter(&filters_phaser);
     //main_printarr(filters_test(&filters_tremolo,10000),10000);

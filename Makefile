@@ -1,7 +1,6 @@
 # TODO: replace `<your-project-moduleN>` with the modules that you implement for
 # your project.
 MY_MODULES = console.o fb.o gl.o shell.o keyboard.o audio.o
-# module.o 
 
 
 # Paths to binariesi.

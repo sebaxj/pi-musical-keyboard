@@ -11,25 +11,55 @@
 #include "sin8.h"
 #include <stdint.h> 
 
+/**********************
+ * shell.c module
+ * 
+ * Desc
+ * 
+ * ********************/
 
+/*
+ * Constants
+ */
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
-#define min(x, y) (x < y ? x : y)
 #define ESC_SCANCODE 0x76
 
-#define PHASE_A 0b1100000000111101001010101
-#define PHASE_A_sharp 0b1100101110101011100011111	
-#define PHASE_B 0b1101011111000111111111011
-#define PHASE_C 0b1110010010011100101111101
-#define PHASE_C_sharp 0b1111001000110100110010011
-#define PHASE_D 0b10000000010011011101111111
-#define PHASE_D_sharp 0b10000111111011101111011101	
-#define PHASE_E 0b10010000000001000100010010
-#define PHASE_F 0b10011000100101000111110110
-#define PHASE_F_sharp 0b10100001101001110010000011
-#define PHASE_G 0b10101011010000111110011000
-#define PHASE_G_sharp 0b10110101011100110001001111
+/*
+ * C compilation macros
+ */
+#define min(x, y) (x < y ? x : y)
 
+/* 
+ * enum to store the binary phase representation of
+ * note frequencies
+ * 
+ * '0b' represents binary number.
+ * For notes A through C#, the first digit represents the 8 LSB
+ * For notes D thorugh G#, the first two digits represent the 8 LSB
+ */
+enum PHASE_CONSTANTS {
+    PHASE_A = 0b1100000000111101001010101,
+    PHASE_A_sharp = 0b1100101110101011100011111,
+    PHASE_B = 0b1101011111000111111111011,
+    PHASE_C = 0b1110010010011100101111101,
+    PHASE_C_sharp = 0b1111001000110100110010011,
+    PHASE_D = 0b10000000010011011101111111,
+    PHASE_D_sharp = 0b10000111111011101111011101,
+    PHASE_E = 0b10010000000001000100010010,
+    PHASE_F = 0b10011000100101000111110110,
+    PHASE_F_sharp = 0b10100001101001110010000011, 
+    PHASE_G = 0b10101011010000111110011000,
+    PHASE_G_sharp = 0b10110101011100110001001111,
+};
+
+/* 
+ * enum to map keyboard scancode to music note
+ * 
+ * '0x' represents hexadecimal number.
+ * Note A is represented by the scancode 0x15 (Q),
+ * Note G# is representedd by the scancode 0x5B (]})
+ */
 enum musical_keys{ 
 	A_code = 0x15, 
 	Asharp_code = 0x1d, 
@@ -45,18 +75,8 @@ enum musical_keys{
 	Gsharp_code = 0x5b
 };
 
-
-#define TESTING_MODE 0 // change to 1 to enable shell.c to run through test array when initializing
-
-
-
 static formatted_fn_t shell_printf;
-
 int cmd_music(int argc, const char *argv[]); 
-
-#if TESTING_MODE
-static const char *tests[9] = {"echo Hello, world!", "", " ", "peek bob", "help", "peek 0xFFFC", "poke 0xFFFC 1", "peek 0xFFFC", "poke 0xF"};
-#endif
 
 static char *strndup(const char *src, size_t n) {
     n = min(strlen(src), n);
@@ -99,47 +119,48 @@ static const command_t commands[] = {
 };
 
 int cmd_music(int argc, const char *argv[]){ 
-    draw_piano(); // from console.c
+    shell_printf("Welcome to the Keyboard Piano.\n");
+    // draw_piano(); // from console.c
     audio_init(); 
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
 	    switch(action.keycode) { 
 		    case A_code: 
-			    audio_write_u8(sinewave, PHASE_A); 
+			    audio_write_u8(sinewave, PHASE_A, action); 
 			    break; 
 		    case Asharp_code: 
-			    audio_write_u8(sinewave, PHASE_A_sharp); 
+			    audio_write_u8(sinewave, PHASE_A_sharp, action); 
 			    break; 
 		    case B_code: 
-			    audio_write_u8(sinewave, PHASE_B); 
+			    audio_write_u8(sinewave, PHASE_B, action); 
 			    break; 
 		    case C_code: 
-			    audio_write_u8(sinewave, PHASE_C); 
+			    audio_write_u8(sinewave, PHASE_C, action); 
 			    break;
 		    case Csharp_code: 
-			    audio_write_u8(sinewave, PHASE_C_sharp); 
+			    audio_write_u8(sinewave, PHASE_C_sharp, action); 
 			    break; 
 		    case D_code: 
-			    audio_write_u8(sinewave, PHASE_D); 
+			    audio_write_u8(sinewave, PHASE_D, action); 
 			    break; 
 		    case Dsharp_code: 
-			    audio_write_u8(sinewave, PHASE_D_sharp); 
+			    audio_write_u8(sinewave, PHASE_D_sharp, action); 
 			    break; 
 		    case E_code: 
-			    audio_write_u8(sinewave, PHASE_E); 
+			    audio_write_u8(sinewave, PHASE_E, action); 
 			    break;
 		    case F_code: 
-			    audio_write_u8(sinewave, PHASE_F); 
+			    audio_write_u8(sinewave, PHASE_F, action); 
 			    break; 
 		    case Fsharp_code: 
-			    audio_write_u8(sinewave, PHASE_F_sharp); 
+			    audio_write_u8(sinewave, PHASE_F_sharp, action); 
 			    break; 
 		    case G_code: 
-			    audio_write_u8(sinewave, PHASE_G); 
+			    audio_write_u8(sinewave, PHASE_G, action); 
 			    break; 
 		    case Gsharp_code: 
-			    audio_write_u8(sinewave, PHASE_G_sharp); 
+			    audio_write_u8(sinewave, PHASE_G_sharp, action); 
 			    break; 
 	    } 	    
     } 
@@ -292,13 +313,6 @@ int shell_evaluate(const char *line)
 void shell_run(void)
 {
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
-
-    #if TESTING_MODE
-    shell_printf("Testing...\n");
-    for(int i = 0; i < sizeof(tests); i++) {
-        shell_evaluate(tests[i]);
-    }
-    #endif
     
     while (1) 
     {

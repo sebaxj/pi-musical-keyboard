@@ -2,11 +2,13 @@
 #define AUDIO_H
 
 #include <stdint.h>
+#include "keyboard.h"
 
 #define DELAY 2
-#define CLOCK_DIVISOR 5
-#define CYCLES 1024
+#define CLOCK_DIVISOR 2
+#define CYCLES 256
 #define RIGHTSHIFT (1024/CYCLES - 1)
+
 /* Hardware abstraction functions for bare metal pulse-width
  * modulation (PWM) audio on the Raspberry Pi.
  *
@@ -16,11 +18,12 @@
  * Author: Philip Levis <pal@cs.stanford.edu>
  * Date: September 10 2014
  */ 
+
 void audio_init();
 void audio_send_filter(unsigned (*function)(void));
-void audio_write_u8 (const uint8_t  waveform[], unsigned dphase);
-void audio_write_u16(const uint16_t waveform[], unsigned dphase);
-void audio_write_i16(const  int16_t waveform[], unsigned dphase);
+void audio_write_u8 (const uint8_t  waveform[], unsigned dphase, key_action_t action);
+void audio_write_u16(const uint16_t waveform[], unsigned dphase, key_action_t action);
+void audio_write_i16(const  int16_t waveform[], unsigned dphase, key_action_t action);
 void audio_send_waveform(unsigned * (*function)(unsigned length), unsigned samples);
 #endif
 
