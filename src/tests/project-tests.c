@@ -45,7 +45,7 @@ enum musical_keys{
 	G_code = 0x54,
 	Gsharp_code = 0x5b
 };
-/*
+
 
 static void test_audio_write_u8_scale(void) {
     // play A major scale with 1 sec intervals
@@ -68,7 +68,7 @@ static void test_audio_write_u8_scale(void) {
     audio_write_u8(sinewave, 2 * PHASE_A, 8); // 2 * base A (220 Hz) to produce octave, 440 Hz
     timer_delay(1);
 }
-*/
+
 
 static key_action_t play_note(unsigned phase, key_action_t action){ 
 	while (action.what == KEY_PRESS) { 
@@ -82,43 +82,43 @@ static void test_audio_write_u8_key(void) {
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
-            //printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
+      printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
 	    switch(action.keycode) { 
 		    case A_code:
-		    		action = play_note(PHASE_A, action); 
-				break; 
+		    	action = play_note(PHASE_A, action); 
+				  break; 
 		    case Asharp_code:
-				action = play_note(PHASE_A_sharp, action); 
+				  action = play_note(PHASE_A_sharp, action); 
 			    	break; 
 		    case B_code: 
-				action = play_note(PHASE_B, action); 
+				  action = play_note(PHASE_B, action); 
 			    	break; 
 		    case C_code: 
-				action = play_note(PHASE_C, action); 
+				  action = play_note(PHASE_C, action); 
 			    	break;
 		    case Csharp_code: 
-				action = play_note(PHASE_C_sharp, action): 
+				  action = play_note(PHASE_C_sharp, action);
 				break; 
 		    case D_code: 
-				action = play_note(PHASE_D, action); 
+				  action = play_note(PHASE_D, action); 
 			    	break; 
 		    case Dsharp_code: 
-				action = play_note(PHASE_D_sharp, action); 
+				  action = play_note(PHASE_D_sharp, action); 
 			    	break; 
 		    case E_code: 
-				action = play_note(PHASE_E, action); 
+				  action = play_note(PHASE_E, action); 
 			    	break;
 		    case F_code: 
-				action = play_note(PHASE_F, action); 
+				  action = play_note(PHASE_F, action); 
 			    	break; 
 		    case Fsharp_code: 
-				action = play_note(PHASE_F_sharp, action); 
+				  action = play_note(PHASE_F_sharp, action); 
 			    	break; 
 		    case G_code: 
-				action = play_note(PHASE_G, action); 
+				  action = play_note(PHASE_G, action); 
 			    	break; 
 		    case Gsharp_code: 
-				action = play_note(PHASE_G_sharp, action): 
+				  action = play_note(PHASE_G_sharp, action);
 			    	break; 
 	    } 	
     }
@@ -135,11 +135,9 @@ void main(void) {
     interrupts_global_enable(); // needed for Isma's keyboard module to work 
 
     /* AUDIO MODULE */
-    /*
     printf("*** AUDIO MODULE ***\n\n");
     printf("Testing single: A Major Scale\n\n");
     test_audio_write_u8_scale();
-    */
 
     /* KEYBOARD MODULE */
     printf("Testing Key Press: Press ESC to quit\n\n");
