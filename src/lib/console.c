@@ -38,8 +38,8 @@ void console_init(unsigned int nrows, unsigned int ncols)
     my_console.n_rows = nrows; 
     my_console.n_cols = ncols; 
 
-    my_console.background = gl_color(0xff, 0xa0, 0x7a); 
-    my_console.text_color = GL_BLACK; 
+    my_console.background = GL_BLACK;
+    my_console.text_color = GL_AMBER; 
 
     gl_init(ncols * gl_get_char_width(), nrows * gl_get_char_height(), GL_SINGLEBUFFER);
 

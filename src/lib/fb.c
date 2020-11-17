@@ -25,11 +25,7 @@ void fb_init(unsigned int width, unsigned int height, unsigned int depth_in_byte
     fb.width = width;
     fb.virtual_width = width;
     fb.height = height;
-    if (mode == FB_SINGLEBUFFER){
-    	fb.virtual_height = height;
-    } else { 
-	fb.virtual_height = height * 2; 
-    } 
+    fb.virtual_height = mode == FB_SINGLEBUFFER ? height : 2 * height;
     fb.bit_depth = depth_in_bytes * 8; // convert number of bytes to number of bits
     fb.x_offset = 0;
     fb.y_offset = 0;
