@@ -30,6 +30,24 @@ Update Monday :
   correctly. I'm not sure why this is, but I left both versions of the code in
   the keyboard.c file.
 
+=> Isma (Tuesday) 
+- Advanced somehow on the problem of playing sounds when the key is pressed. 
+Try it out by running either the test keyboard part, or the shell directly. It 
+doesn't sound great yet. The idea is that I enter a for loop where I keep playing 
+the sound for 125,000 us again and again until I get a KEY_RELEASE (see function play_note) 
+. Therefore, the sound is not great since we can hear little cuts. Besides, the first one 
+is played and cuts then we enter the for loop with the "continuous" sound, idk why yet. 
+- The app is working fine for me now, we were initializing the audio two times, once in
+the main in apps, and once is the cmd_music. Now, we're only initializing it in the main
+function. music_cmd seems to be working fine now. 
+- We'll try to see when we meet today why my version of the keyboard is not working for you. 
+I noticed that in the test file, you weren't enabling global interrupts. Maybe that's why ? 
+I'm using my version of the keyboard from assignment 7 and not assigment 5, so it might be 
+due to that. I've corrected the main function of the test file to enable the interrupts, 
+you can try again maybe ? Don't forget to turn RESET to 0 at the beginning of the keyboard file
+if you don't need the RESET code for the keyboard, it'll just comment out automatically the parts
+concerning the RESET code. 
+
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
  - use keyboard driver to initiate notes (shell.c for now). 
