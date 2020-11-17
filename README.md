@@ -8,6 +8,28 @@ Update Monday :
 - I've implemented the "music" command in shell.c, for now, draw_piano() just clears the screen, and you can play one of the 12 KEYS (qwertyuiop[]) and it outputs the corresponding note. However, it only works for the first key for now, as the audio_write functions are still looping indefinitely. You can try the new shell with "make install", then typing "music"in the shell, it's supposed to just clear the screen for now (will draw the piano when we implement the graphic part), and waits for you to press one of the appropriate keys. 
 - I deleted the files in include that we don't need (they're already in libpi and libpiextra) in my local repo, however I didn't delete them on the repo so you shouldn't see any change for now. I wasn't sure if you modified some of them or not. 
 
+- Sebastian:
+- Updated audio driver to have a time parameter which places a tone in units of
+  125,000 us.
+- Added support between keyboard and audio in shell and test file.
+- Each keypress results in a tone duration of 125,000 us.
+    - Next step would be to figure out how to handle a tone when a key is held
+      down.
+- Updated app to start console and boot into music mode. However, no tone is
+  played when a key is pressed as it should when tested in the test file. This
+  might be due to the #include "sin8.h" statement in the shell.c file. Or, it
+  could be due to the initialization of the audio driver?
+- I also updated the Makefile so that if you have the most recent git pull, it
+  should compile the test and app correctly. In the /include file, you need 5 .h
+  files.
+- The tests start by playing a full A major scale, followed by a testing of
+  key presses. These all work correctly, but the "music_cmd" in shell.c doesn't
+  work correctly.
+- Also, the keyboard driver wasn't working for me? When I used the reference
+  implementation it worked correctly, or when I used by implementation it worked
+  correctly. I'm not sure why this is, but I left both versions of the code in
+  the keyboard.c file.
+
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
  - use keyboard driver to initiate notes (shell.c for now). 
@@ -15,12 +37,10 @@ FILE STRUCTURE: app is musical_ps2_keyboard.c
 
 TODO:
 
-1) Figure out how to play different notes using the audio jack on the Pi. DONE (try out play.c in src/apps with the different phases). 
-2) Adjust keyboard module to correlate scancode to specific note to be played. "music command"
-3) modify audio.c to play notes and stop notes. 
-3) Create graphical interface of a 1-octave piano
-
-
+1) Adjust keyboard module to correlate scancode to specific note to be played. "music command" doesn't
+work in shell, it only works in the testing implementation.
+2) modify audio.c and shell.c to handle held-down keys correctly. 
+3) Create graphical interface of a 1-octave piano.
 4) We should set a function which does that the conversion for a given frequency : 
 I'm trying to understand how to deal with fractions in c (floats) and convert it to a binary fraction. 
 5) Waiting to figure out how to do that, there are online converters : https://www.exploringbinary.com/binary-converter/
