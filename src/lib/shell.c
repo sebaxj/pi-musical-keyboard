@@ -9,7 +9,6 @@
 #include "console.h"
 #include "audio.h"
 #include <stdint.h> 
-#include "sin8.h"
 
 /**********************
  * shell.c module
@@ -24,7 +23,7 @@
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define ESC_SCANCODE 0x76
-#define TESTING_MODE 1
+#define TESTING_MODE 0
 
 /*
  * C compilation macros
@@ -119,7 +118,8 @@ static const command_t commands[] = {
     {"music", "This command turns the keyboard into a musical keyboard", cmd_music} 
 };
 
-
+#if TESTING_MODE
+#include "sin8.h"
 static key_action_t play_note(unsigned phase, key_action_t action){ 
 	while (action.what == KEY_PRESS) { 
 		audio_write_u8(sinewave, phase, 1); 
@@ -127,12 +127,12 @@ static key_action_t play_note(unsigned phase, key_action_t action){
 	} 
 	return action; 
 } 
+#endif
 
 static int cmd_music(int argc, const char *argv[]){ 
     shell_printf("Welcome to the Keyboard Piano.\n");
     // draw_piano(); // from console.c
-   // #if TESTING_MODE
-    //#include "sin8.h"
+    #if TESTING_MODE
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
@@ -175,7 +175,7 @@ static int cmd_music(int argc, const char *argv[]){
 			    break; 
 	    } 	    
     } 
-   // #endif
+    #endif
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
     return 0; 
 } 
