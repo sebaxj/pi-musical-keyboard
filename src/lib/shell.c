@@ -8,7 +8,6 @@
 #include "timer.h"
 #include "console.h"
 #include "audio.h"
-#include "sin8.h"
 #include <stdint.h> 
 
 /**********************
@@ -24,6 +23,7 @@
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define ESC_SCANCODE 0x76
+#define TESTING_MODE 1
 
 /*
  * C compilation macros
@@ -76,7 +76,7 @@ enum musical_keys{
 };
 
 static formatted_fn_t shell_printf;
-int cmd_music(int argc, const char *argv[]); 
+static int cmd_music(int argc, const char *argv[]); 
 
 static char *strndup(const char *src, size_t n) {
     n = min(strlen(src), n);
@@ -118,60 +118,62 @@ static const command_t commands[] = {
     {"music", "This command turns the keyboard into a musical keyboard", cmd_music} 
 };
 
-int cmd_music(int argc, const char *argv[]){ 
+static int cmd_music(int argc, const char *argv[]){ 
     shell_printf("Welcome to the Keyboard Piano.\n");
     // draw_piano(); // from console.c
-    audio_init(); 
+    audio_init();
+    #if TESTING_MODE
+    #include "sin8.h"
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
 	    switch(action.keycode) { 
 		    case A_code: 
-			    audio_write_u8(sinewave, PHASE_A, action); 
+			    audio_write_u8(sinewave, PHASE_A, 1); 
 			    break; 
-		    case Asharp_code: 
-			    audio_write_u8(sinewave, PHASE_A_sharp, action); 
+		    case Asharp_code:
+			    audio_write_u8(sinewave, PHASE_A_sharp, 1); 
 			    break; 
 		    case B_code: 
-			    audio_write_u8(sinewave, PHASE_B, action); 
+			    audio_write_u8(sinewave, PHASE_B, 1); 
 			    break; 
 		    case C_code: 
-			    audio_write_u8(sinewave, PHASE_C, action); 
+			    audio_write_u8(sinewave, PHASE_C, 1); 
 			    break;
 		    case Csharp_code: 
-			    audio_write_u8(sinewave, PHASE_C_sharp, action); 
+			    audio_write_u8(sinewave, PHASE_C_sharp, 1); 
 			    break; 
 		    case D_code: 
-			    audio_write_u8(sinewave, PHASE_D, action); 
+			    audio_write_u8(sinewave, PHASE_D, 1); 
 			    break; 
 		    case Dsharp_code: 
-			    audio_write_u8(sinewave, PHASE_D_sharp, action); 
+			    audio_write_u8(sinewave, PHASE_D_sharp, 1); 
 			    break; 
 		    case E_code: 
-			    audio_write_u8(sinewave, PHASE_E, action); 
+			    audio_write_u8(sinewave, PHASE_E, 1); 
 			    break;
 		    case F_code: 
-			    audio_write_u8(sinewave, PHASE_F, action); 
+			    audio_write_u8(sinewave, PHASE_F, 1); 
 			    break; 
 		    case Fsharp_code: 
-			    audio_write_u8(sinewave, PHASE_F_sharp, action); 
+			    audio_write_u8(sinewave, PHASE_F_sharp, 1); 
 			    break; 
 		    case G_code: 
-			    audio_write_u8(sinewave, PHASE_G, action); 
+			    audio_write_u8(sinewave, PHASE_G, 1); 
 			    break; 
 		    case Gsharp_code: 
-			    audio_write_u8(sinewave, PHASE_G_sharp, action); 
+			    audio_write_u8(sinewave, PHASE_G_sharp, 1); 
 			    break; 
 	    } 	    
     } 
+    #endif
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
     return 0; 
 } 
- 
 
 int cmd_help(int argc, const char *argv[]) 
 {
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < (sizeof(commands) / sizeof(*commands)); i++) {
         shell_printf("%s: %s\n", commands[i].name, commands[i].description);
     }
     return 0;
@@ -189,6 +191,7 @@ int cmd_echo(int argc, const char *argv[])
 int cmd_reboot(int argc, const char* argv[]) {
     shell_printf("Pi rebooting...\nSee ya back at the bootloader!");
     timer_delay(1);
+    uart_putchar(EOT);
     pi_reboot();
     return 0;
 }

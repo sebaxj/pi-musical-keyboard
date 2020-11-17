@@ -80,10 +80,13 @@ void audio_init() {
    
    These functions do not return.
 */
-void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t action) 
+
+// play audio for specific duration
+void audio_write_u8(const uint8_t waveform[], unsigned dphase, unsigned int duration) 
 {
     unsigned phase = 0;
-    while(action.what == KEY_PRESS) {
+    unsigned int current_ticks = timer_get_ticks();
+    while(timer_get_ticks() - current_ticks < duration * TONE_CYCLE) {
         unsigned status = pwm_get_status();
         if (!(status & PWM_FULL1)) {
             unsigned angle = phase >> 24;
@@ -92,14 +95,14 @@ void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t acti
             pwm_write( pcm ); // output to channel 1
             phase += dphase; 
         }
-        action = keyboard_read_sequence();
     }
 }
 
-void audio_write_u16(const uint16_t waveform[], unsigned dphase, key_action_t action) 
+void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int duration) 
 {
     unsigned phase = 0;
-    while(action.what == KEY_PRESS) {
+    unsigned int current_ticks = timer_get_ticks();
+    while(timer_get_ticks() - current_ticks < duration * TONE_CYCLE) {
         unsigned status = pwm_get_status();
         if (!(status & PWM_FULL1)) {
             unsigned angle = phase >> 24;
@@ -108,14 +111,14 @@ void audio_write_u16(const uint16_t waveform[], unsigned dphase, key_action_t ac
             pwm_write( pcm ); // output to channel 1
             phase += dphase; 
         }
-        action = keyboard_read_sequence();
     }
 }
 
-void audio_write_i16(const int16_t waveform[], unsigned dphase, key_action_t action) 
+void audio_write_i16(const int16_t waveform[], unsigned dphase, unsigned int duration) 
 {
     unsigned phase = 0;
-    while(action.what == KEY_PRESS) {
+    unsigned int current_ticks = timer_get_ticks();
+    while(timer_get_ticks() - current_ticks < duration * TONE_CYCLE) {
         unsigned status = pwm_get_status();
         if (!(status & PWM_FULL1)) {
             unsigned angle = phase >> 24;
@@ -125,10 +128,8 @@ void audio_write_i16(const int16_t waveform[], unsigned dphase, key_action_t act
             pwm_write( pcm ); // output to channel 1
             phase += dphase; 
         }
-        action = keyboard_read_sequence();
     }
 }
-
 
 /*
  *  Sends a filtered signal out through the RPI PWM.

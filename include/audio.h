@@ -8,6 +8,7 @@
 #define CLOCK_DIVISOR 2
 #define CYCLES 256
 #define RIGHTSHIFT (1024/CYCLES - 1)
+#define TONE_CYCLE 125000
 
 /* Hardware abstraction functions for bare metal pulse-width
  * modulation (PWM) audio on the Raspberry Pi.
@@ -21,9 +22,11 @@
 
 void audio_init();
 void audio_send_filter(unsigned (*function)(void));
-void audio_write_u8 (const uint8_t  waveform[], unsigned dphase, key_action_t action);
-void audio_write_u16(const uint16_t waveform[], unsigned dphase, key_action_t action);
-void audio_write_i16(const  int16_t waveform[], unsigned dphase, key_action_t action);
+
+// play tone for specific duration
+void audio_write_u8(const uint8_t  waveform[], unsigned dphase, unsigned int duration);
+void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int duration);
+void audio_write_i16(const  int16_t waveform[], unsigned dphase, unsigned int duration);
 void audio_send_waveform(unsigned * (*function)(unsigned length), unsigned samples);
 #endif
 

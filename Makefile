@@ -1,7 +1,6 @@
 # TODO: replace `<your-project-moduleN>` with the modules that you implement for
 # your project.
-MY_MODULES = console.o fb.o gl.o shell.o keyboard.o audio.o
-
+MY_MODULES = console.o fb.o gl.o shell.o audio.o timer.o printf.o gpio.o strings.o backtrace.o malloc.o keyboard.o gpio_interrupts.o interrupts_asm.o bits_asm.o
 
 # Paths to binariesi.
 # TODO: replace `<your-project-app>` with the name of your project's
@@ -9,7 +8,7 @@ MY_MODULES = console.o fb.o gl.o shell.o keyboard.o audio.o
 # TODO: replace `<your-project-tests>` with the name of your project's tests
 # (suffix excluded).
 APPLICATION = build/bin/musical_p2p_keyboard.bin
-TEST 		= build/bin/<your-project-tests>.bin
+TEST 		= build/bin/project-tests.bin
 
 # Use order-only prerequisite to create the build directory.
 # https://www.cmcrossroads.com/article/making-directories-gnu-make
@@ -22,7 +21,7 @@ OBJECTS = $(addprefix build/obj/, $(MY_MODULES) start.o cstart.o)
 
 # C compiler.
 CFLAGS_EXTRA = -Werror
-CFLAGS 	= -I$(CS107E)/include -Iinclude -Og -g -Wall -std=c99 -ffreestanding $(CFLAGS_EXTRA)
+CFLAGS 	= -Iinclude -I$(CS107E)/include -Og -g -Wall -std=c99 -ffreestanding $(CFLAGS_EXTRA)
 CFLAGS += -mapcs-frame -fno-omit-frame-pointer -mpoke-function-name -Wpointer-arith
 LDFLAGS	= -nostdlib -T src/boot/memmap -L$(CS107E)/lib
 LDLIBS 	= -lpiextra -lpi -lgcc # TODO: link against any other libraries that you need for your project.
