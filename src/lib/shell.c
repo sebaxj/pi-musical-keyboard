@@ -9,6 +9,7 @@
 #include "console.h"
 #include "audio.h"
 #include <stdint.h> 
+#include "sin8.h"
 
 /**********************
  * shell.c module
@@ -35,8 +36,8 @@
  * note frequencies
  * 
  * '0b' represents binary number.
- * For notes A through C#, the first digit represents the 8 LSB
- * For notes D thorugh G#, the first two digits represent the 8 LSB
+ * For notes A through C#, the first digit represents the 8 MSB
+ * For notes D thorugh G#, the first two digits represent the 8 MSB
  */
 enum PHASE_CONSTANTS {
     PHASE_A = 0b1100000000111101001010101,
@@ -118,55 +119,63 @@ static const command_t commands[] = {
     {"music", "This command turns the keyboard into a musical keyboard", cmd_music} 
 };
 
+
+static key_action_t play_note(unsigned phase, key_action_t action){ 
+	while (action.what == KEY_PRESS) { 
+		audio_write_u8(sinewave, phase, 1); 
+		action = keyboard_read_sequence(); 
+	} 
+	return action; 
+} 
+
 static int cmd_music(int argc, const char *argv[]){ 
     shell_printf("Welcome to the Keyboard Piano.\n");
     // draw_piano(); // from console.c
-    audio_init();
-    #if TESTING_MODE
-    #include "sin8.h"
+   // #if TESTING_MODE
+    //#include "sin8.h"
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
 	    switch(action.keycode) { 
 		    case A_code: 
-			    audio_write_u8(sinewave, PHASE_A, 1); 
+			    action = play_note(PHASE_A, action); 
 			    break; 
 		    case Asharp_code:
-			    audio_write_u8(sinewave, PHASE_A_sharp, 1); 
+			    action = play_note(PHASE_A_sharp, action); 
 			    break; 
 		    case B_code: 
-			    audio_write_u8(sinewave, PHASE_B, 1); 
+			    action = play_note(PHASE_B, action); 
 			    break; 
 		    case C_code: 
-			    audio_write_u8(sinewave, PHASE_C, 1); 
+			    action = play_note(PHASE_C, action);
 			    break;
 		    case Csharp_code: 
-			    audio_write_u8(sinewave, PHASE_C_sharp, 1); 
+			    action = play_note(PHASE_C_sharp, action); 
 			    break; 
 		    case D_code: 
-			    audio_write_u8(sinewave, PHASE_D, 1); 
+			    action = play_note(PHASE_D, action); 
 			    break; 
 		    case Dsharp_code: 
-			    audio_write_u8(sinewave, PHASE_D_sharp, 1); 
+			    action = play_note(PHASE_D_sharp, action); 
 			    break; 
 		    case E_code: 
-			    audio_write_u8(sinewave, PHASE_E, 1); 
+			    action = play_note(PHASE_E, action); 
 			    break;
 		    case F_code: 
-			    audio_write_u8(sinewave, PHASE_F, 1); 
+			    action = play_note(PHASE_F, action); 
 			    break; 
 		    case Fsharp_code: 
-			    audio_write_u8(sinewave, PHASE_F_sharp, 1); 
+			    action = play_note(PHASE_F_sharp, action); 
 			    break; 
 		    case G_code: 
-			    audio_write_u8(sinewave, PHASE_G, 1); 
+			    action = play_note(PHASE_G, action); 
 			    break; 
 		    case Gsharp_code: 
-			    audio_write_u8(sinewave, PHASE_G_sharp, 1); 
+			    action = play_note(PHASE_G_sharp, action); 
 			    break; 
 	    } 	    
     } 
-    #endif
+   // #endif
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
     return 0; 
 } 

@@ -25,6 +25,7 @@ void audio_send_filter(unsigned (*function)(void));
 
 // play tone for specific duration
 void audio_write_u8(const uint8_t  waveform[], unsigned dphase, unsigned int duration);
+//void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t action); 
 void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int duration);
 void audio_write_i16(const  int16_t waveform[], unsigned dphase, unsigned int duration);
 void audio_send_waveform(unsigned * (*function)(unsigned length), unsigned samples);

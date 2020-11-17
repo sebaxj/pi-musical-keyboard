@@ -83,6 +83,7 @@ void audio_init() {
 */
 
 // play audio for specific duration
+
 void audio_write_u8(const uint8_t waveform[], unsigned dphase, unsigned int duration) 
 {
     unsigned phase = 0;
@@ -98,6 +99,35 @@ void audio_write_u8(const uint8_t waveform[], unsigned dphase, unsigned int dura
         }
     }
 }
+
+
+/*
+void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t action){
+	unsigned phase = 0; 
+	//unsigned char start_scancode = action.keycode;
+	//unsigned int status = (action.what == KEY_PRESS) ? 1 : 0;  
+	while (1) { 
+		unsigned status = pwm_get_status(); 
+		if (!(status & PWM_FULL1)){
+			unsigned angle = phase >> 24; 
+			uint8_t pcm = waveform[angle]; 
+			pwm_write(pcm); // output to channel 0 
+			pwm_write(pcm); // output to channel 1
+			phase += dphase; 
+		} 
+		action = keyboard_read_sequence(); 
+                //printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
+		//if (action.what == KEY_RELEASE) { 
+		//	printf("end"); 
+		//	break; 
+		//} 
+
+	} 
+} 
+*/
+
+
+
 
 void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int duration) 
 {

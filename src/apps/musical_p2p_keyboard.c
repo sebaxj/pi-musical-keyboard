@@ -7,7 +7,6 @@
 #include "uart.h"
 #include "audio.h"
 
-#define PHASE (99<<18)
 #define NUM_ROWS 20 
 #define NUM_COLS 40 
 
