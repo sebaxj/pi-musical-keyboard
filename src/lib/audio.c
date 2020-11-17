@@ -38,6 +38,7 @@
 */
 
 
+/*
 void audio_send_filter(unsigned (*function)(void)) {
     unsigned read = function();
     while(1) {
@@ -63,6 +64,7 @@ void audio_send_waveform(unsigned * (*function)(unsigned length), unsigned sampl
   }
 }
 
+*/
 /* 
    These functions transmit a wave to the RPi audio jack 
    as a pulse-width-modulated signal.
@@ -132,7 +134,7 @@ void audio_write_i16(const int16_t waveform[], unsigned dphase)
 void audio_init() {
     gpio_set_function( GPIO_PIN40, GPIO_FUNC_ALT0 );
     gpio_set_function( GPIO_PIN45, GPIO_FUNC_ALT0 );
-    delay_ms(2);
+    timer_delay_ms(2);
 
     pwm_init();
 
