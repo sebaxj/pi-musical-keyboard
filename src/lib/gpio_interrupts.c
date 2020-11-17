@@ -1,33 +1,10 @@
 #include <stdbool.h>
 #include "gpio_interrupts.h"
+#include "interrupts.h"
 #include "assert.h"
-
-// This struct is declared to match memory layout of the interrupt registers
-struct interrupt_t {
-    unsigned int reservedA;
-    unsigned int pending[2];
-    unsigned int fiq_control;
-    unsigned int enable[2];
-    unsigned int reservedB;
-    unsigned int disable[2];
-    unsigned int reservedC;
-};
-
-static struct {
-    handler_fn_t fn;
-} handlers[INTERRUPTS_COUNT];
-
-#define INTERRUPT_CONTROLLER_BASE (void *)0x2000B200
-static volatile struct interrupt_t * const interrupt = INTERRUPT_CONTROLLER_BASE;
-
-// Returns whether a given IRQ is safe to be used. The pin must be a valid gpio pin recieving input.
-static bool is_safe(unsigned int irq) 
-{
-    if((irq >= GPIO_PIN0 && irq <= GPIO_PIN_LAST) && 
-    gpio_get_function(irq) == GPIO_FUNC_INPUT) {return true;}
-    return false;
-}
-
+#include "gpio.h"
+#include <stdint.h> 
+#include "printf.h"
 /*
  * Module to configure GPIO interrupts for Raspberry Pi.
  * Because all of the GPIO pins share a small set of GPIO
@@ -40,6 +17,21 @@ static bool is_safe(unsigned int irq)
  *
  * Last update:   May 2020
  */
+
+// create array of handlers for pins 
+static struct { 
+	handler_fn_t fn; 
+} handlers_pins[GPIO_PIN_LAST + 1]; 
+
+struct pending_t { 
+	uint32_t eds[2]; 
+}; 
+
+#define PENDING_BASE (void*) 0x20200040 // from BCM 2835 ARM peripherals manual 
+
+static volatile struct pending_t *const pending = PENDING_BASE; 
+
+static bool gpio_interrupts_handler(unsigned int pc); 
 
 bool gpio_default_handler(unsigned int pc) { return false; }
 
@@ -57,10 +49,35 @@ bool gpio_default_handler(unsigned int pc) { return false; }
  */
 void gpio_interrupts_init(void) 
 {
-    // disable all sources
-    interrupt->disable[0] = 0xffffffff;
-    interrupt->disable[1] = 0xffffffff;
+	// disable interrupts 
+	gpio_interrupts_disable(); 
+	// reset all handlers for pins to default handlers 
+	for (int i = 0; i< 54; i++) { 
+		handlers_pins[i].fn = gpio_default_handler;
+	} 
+	// set a handler for source (big boy handler) 
+	interrupts_register_handler(INTERRUPTS_GPIO3, gpio_interrupts_handler); 
 }
+
+extern unsigned int count_leading_zeroes(unsigned int val);
+
+// big boy handler 
+static bool gpio_interrupts_handler(unsigned int pc) { 
+//     check EDS for which pin went on 
+	int pin = 31 - count_leading_zeroes(pending->eds[0]);
+        //printf("%d", pin); 
+	// check for the next 22 if there was no set pin in pending.eds0 
+	if (pin == -1) { 
+	    pin = 31 - count_leading_zeroes(pending->eds[1]) + 32; 
+  	} 	  
+//     if (that was a valid pin) 
+	if (pin >= GPIO_PIN_FIRST && pin <= GPIO_PIN_LAST){ 
+	    return handlers_pins[pin].fn(pc); 
+            //return true; 
+	} 
+	return false; 
+	//return gpio_interrupts_register_handler(pin, handlers_pin[pin].fn(pc)); 
+} 
 
 /*
  * `gpio_interrupts_enable`
@@ -69,8 +86,7 @@ void gpio_interrupts_init(void)
  */
 void gpio_interrupts_enable(void) 
 {
-    unsigned int shift = INTERRUPTS_GPIO3 - INTERRUPTS_BASIC_BASE;
-    interrupt->enable[0] |= 1 << shift;
+	interrupts_enable_source(INTERRUPTS_GPIO3); 
 }
 
 /*
@@ -80,8 +96,7 @@ void gpio_interrupts_enable(void)
  */
 void gpio_interrupts_disable(void) 
 {
-    interrupt->disable[0] = 0xffffffff;
-    interrupt->disable[1] = 0xffffffff;
+	interrupts_disable_source(INTERRUPTS_GPIO3); 
 }
 
 /* 
@@ -98,9 +113,10 @@ void gpio_interrupts_disable(void)
  */
 handler_fn_t gpio_interrupts_register_handler(unsigned int pin, handler_fn_t fn) 
 {
-    assert(is_safe(pin));
-    
-    handler_fn_t old_handler = handlers[pin].fn;
-    handlers[pin].fn = fn;
-    return old_handler;
+	assert(pin <= GPIO_PIN_LAST && pin >= GPIO_PIN_FIRST); 
+        handler_fn_t old_handler = handlers_pins[pin].fn; 
+	handlers_pins[pin].fn = fn; 
+	return old_handler; 	
+	//return 0; 
 }
+
