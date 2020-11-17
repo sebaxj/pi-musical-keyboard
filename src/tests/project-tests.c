@@ -78,6 +78,7 @@ static key_action_t play_note(unsigned phase, key_action_t action){
 	return action; 
 } 
 
+
 static void test_audio_write_u8_key(void) {
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
@@ -123,7 +124,6 @@ static void test_audio_write_u8_key(void) {
 	    } 	
     }
 }
-
 
 
 void main(void) {

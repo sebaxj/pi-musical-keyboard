@@ -53,7 +53,7 @@ enum PHASE_CONSTANTS {
     PHASE_G_sharp = 0b10110101011100110001001111,
 };
 
-/* 
+/* i
  * enum to map keyboard scancode to music note
  * 
  * '0x' represents hexadecimal number.
