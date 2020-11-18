@@ -52,10 +52,9 @@ concerning the RESET code.
 - Tried to resolve the cutting issue. Using a timer_delay before playing the note seems to make it better, 
 however this causes a lag between the keyboard press and the sound coming out. I think 400 ms is a good 
 trade-off here (at least the best I could find). 
-- The shell now can draw a keyboard! Try it out :). It's not interactive yet though. I had to add a function 
-in gl.c, so I've modified the gl.h and added it to our include directory.  
-- My implementation of the keyboard graphic may not be optimal to make it interactive, my first goal was just 
-to draw a piano for now. 
+- The shell has now a graphic interactive keyboard! I've modified gl.h, console.c and shell.c (I think some of the
+functions in gl.h should be in console.h but i haven't really checked that yet). If you want any clarification, we can 
+meet quickly. I'm afraid my code might be unclear in some parts. 
 
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
