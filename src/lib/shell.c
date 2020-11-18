@@ -9,6 +9,7 @@
 #include "console.h"
 #include "audio.h"
 #include <stdint.h> 
+#include "printf.h"
 
 /**********************
  * shell.c module
@@ -23,7 +24,7 @@
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define ESC_SCANCODE 0x76
-#define TESTING_MODE 0
+#define TESTING_MODE 1
 
 /*
  * C compilation macros
@@ -121,6 +122,7 @@ static const command_t commands[] = {
 #if TESTING_MODE
 #include "sin8.h"
 static key_action_t play_note(unsigned phase, key_action_t action){ 
+	timer_delay_ms(400); // almost resolves the cutting issue at the beginning, if we delay more it's even better but it makes the keyboard asynchronous with the sound. 
 	while (action.what == KEY_PRESS) { 
 		audio_write_u8(sinewave, phase, 1); 
 		action = keyboard_read_sequence(); 
@@ -130,8 +132,8 @@ static key_action_t play_note(unsigned phase, key_action_t action){
 #endif
 
 static int cmd_music(int argc, const char *argv[]){ 
-    shell_printf("Welcome to the Keyboard Piano.\n");
-    // draw_piano(); // from console.c
+    //shell_printf("Welcome to the Keyboard Piano.\n");
+    draw_piano(); // from console.c
     #if TESTING_MODE
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();

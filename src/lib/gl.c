@@ -62,6 +62,13 @@ void gl_draw_pixel(int x, int y, color_t c)
     } 
 }
 
+void gl_draw_vertical_line(unsigned int x, unsigned int y1, unsigned int y2, color_t c)
+{ 
+	unsigned int min = y2 < fb_get_height() ? y2 : fb_get_height(); 
+	for (int y = 0; y < min; y++)
+		gl_draw_pixel(x, y1 + y, c); 
+} 
+
 color_t gl_read_pixel(int x, int y)
 {
     unsigned int row_len = fb_get_pitch()/sizeof(unsigned int); 

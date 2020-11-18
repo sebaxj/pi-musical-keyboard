@@ -38,8 +38,8 @@ void console_init(unsigned int nrows, unsigned int ncols)
     my_console.n_rows = nrows; 
     my_console.n_cols = ncols; 
 
-    my_console.background = GL_BLACK;
-    my_console.text_color = GL_AMBER; 
+    my_console.background = GL_AMBER;
+    my_console.text_color = GL_BLACK; 
 
     gl_init(ncols * gl_get_char_width(), nrows * gl_get_char_height(), GL_SINGLEBUFFER);
 
@@ -138,5 +138,31 @@ static void draw_text(char * text){
 
 void draw_piano(void){
 	console_clear(); 
+	console_printf("Welcome to the piano keyboard. Have fun!\n"); 
+	int width_console = my_console.n_cols*gl_get_char_width(); 
+	int height_console = my_console.n_rows*gl_get_char_height(); 
+	int piano_width = width_console*9/10;
+	int piano_start_y = gl_get_char_height() + height_console * 5/100; 
+	int piano_start_x = width_console*5/100; 
+	int piano_height = (my_console.n_rows - 3) * gl_get_char_height(); 
+	gl_draw_rect(piano_start_x, piano_start_y, piano_width, piano_height, GL_WHITE); 
+	int white_key_width = piano_width/8; 
+	// draw white keys
+        for (int i = 0; i < 9; i++) { 	
+		gl_draw_vertical_line(piano_start_x + i*white_key_width, piano_start_y, piano_height, GL_BLACK);
+	} 
+	// draw black keys 
+        int black_key_height = 3*piano_height/5; 
+	int black_key_width = 2*white_key_width/3;
+	// A sharp 	
+	gl_draw_rect(piano_start_x+ 2*white_key_width/3, piano_start_y, black_key_width, black_key_height, GL_BLACK); 
+	// C sharp and D sharp 
+	for (int i = 2; i < 4; i++) {
+		gl_draw_rect(piano_start_x + i*white_key_width + 2*white_key_width/3, piano_start_y, black_key_width, black_key_height, GL_BLACK); 
+	} 	
+	// F sharp and G sharp 
+	for (int i = 5; i < 7; i++) { 
+		gl_draw_rect(piano_start_x + i*white_key_width + 2*white_key_width/3, piano_start_y, black_key_width, black_key_height, GL_BLACK); 
+	} 
 } 
 
