@@ -46,7 +46,16 @@ I'm using my version of the keyboard from assignment 7 and not assigment 5, so i
 due to that. I've corrected the main function of the test file to enable the interrupts, 
 you can try again maybe ? Don't forget to turn RESET to 0 at the beginning of the keyboard file
 if you don't need the RESET code for the keyboard, it'll just comment out automatically the parts
-concerning the RESET code. 
+concerning the RESET code.
+
+=> Isma (WEDNESDAY) 
+- Tried to resolve the cutting issue. Using a timer_delay before playing the note seems to make it better, 
+however this causes a lag between the keyboard press and the sound coming out. I think 400 ms is a good 
+trade-off here (at least the best I could find). 
+- The shell now can draw a keyboard! Try it out :). It's not interactive yet though. I had to add a function 
+in gl.c, so I've modified the gl.h and added it to our include directory.  
+- My implementation of the keyboard graphic may not be optimal to make it interactive, my first goal was just 
+to draw a piano for now. 
 
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack

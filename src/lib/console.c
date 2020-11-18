@@ -154,6 +154,8 @@ void draw_piano(void){
 	// draw black keys 
         int black_key_height = 3*piano_height/5; 
 	int black_key_width = 2*white_key_width/3;
+	// draw left black key - only for esthetics 
+	gl_draw_rect(piano_start_x, piano_start_y, black_key_width/2, black_key_height, GL_BLACK); 
 	// A sharp 	
 	gl_draw_rect(piano_start_x+ 2*white_key_width/3, piano_start_y, black_key_width, black_key_height, GL_BLACK); 
 	// C sharp and D sharp 
@@ -164,5 +166,7 @@ void draw_piano(void){
 	for (int i = 5; i < 7; i++) { 
 		gl_draw_rect(piano_start_x + i*white_key_width + 2*white_key_width/3, piano_start_y, black_key_width, black_key_height, GL_BLACK); 
 	} 
+	// draw last black key - for esthetics 
+	gl_draw_rect(piano_start_x + 7*white_key_width + 2*white_key_width/3, piano_start_y, black_key_width/2, black_key_height, GL_BLACK); 
 } 
 
