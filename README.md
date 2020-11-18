@@ -55,6 +55,8 @@ trade-off here (at least the best I could find).
 - The shell has now a graphic interactive keyboard! I've modified gl.h, console.c and shell.c (I think some of the
 functions in gl.h should be in console.h but i haven't really checked that yet). If you want any clarification, we can 
 meet quickly. I'm afraid my code might be unclear in some parts. 
+- Also, in the graphic keyboard, I put the A from the other octave because I think it's esthetically nicer , but it's 
+not yet implemented in the shell (no key associated, and no phase yet). 
 
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
