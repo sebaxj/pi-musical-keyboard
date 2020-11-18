@@ -117,14 +117,15 @@ void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t acti
 		} 
 		action = keyboard_read_sequence(); 
                 //printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
-		//if (action.what == KEY_RELEASE) { 
-		//	printf("end"); 
-		//	break; 
-		//} 
+		if (action.what == KEY_RELEASE) { 
+			printf("end"); 
+			break; 
+		} 
 
 	} 
 } 
 */
+
 
 
 
