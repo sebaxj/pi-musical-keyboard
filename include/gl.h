@@ -19,6 +19,21 @@
 
 typedef enum { GL_SINGLEBUFFER = FB_SINGLEBUFFER, GL_DOUBLEBUFFER = FB_DOUBLEBUFFER } gl_mode_t;
 
+enum state { MIDDLE_KEY, RIGHT_KEY, LEFT_KEY}; 
+
+int piano_keys[8]; 
+
+enum piano_keys_x{
+	key_A, 
+	key_B, 
+	key_C, 
+	key_D, 
+	key_E, 
+	key_F, 
+	key_G, 
+	key_last_A,
+}; 
+
 /*
  * Initialize the graphic library. This function will call fb_init in turn 
  * to initialize the framebuffer. The framebuffer will be initialzed to
@@ -139,6 +154,8 @@ color_t gl_read_pixel(int x, int y);
 void gl_draw_char(int x, int y, int ch, color_t c);
 
 void gl_draw_vertical_line(unsigned int x, unsigned int y1, unsigned int y2, color_t c); 
+void draw_middle_key(int x, color_t color, enum state key); 
+void draw_sharp(int x, color_t color); 
 
 /*
  * Draw a string at location x,y in color c. The characters are drawn

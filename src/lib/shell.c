@@ -10,6 +10,7 @@
 #include "audio.h"
 #include <stdint.h> 
 #include "printf.h"
+#include "gl.h"
 
 /**********************
  * shell.c module
@@ -131,6 +132,8 @@ static key_action_t play_note(unsigned phase, key_action_t action){
 } 
 #endif
 
+static color_t color_press = GL_MAGENTA; 
+
 static int cmd_music(int argc, const char *argv[]){ 
     //shell_printf("Welcome to the Keyboard Piano.\n");
     draw_piano(); // from console.c
@@ -140,40 +143,64 @@ static int cmd_music(int argc, const char *argv[]){
 	    if (action.keycode == ESC_SCANCODE) break;
 	    switch(action.keycode) { 
 		    case A_code: 
+			    draw_middle_key(piano_keys[key_A], color_press, MIDDLE_KEY); 
 			    action = play_note(PHASE_A, action); 
+			    draw_middle_key(piano_keys[key_A], GL_WHITE, MIDDLE_KEY);
 			    break; 
 		    case Asharp_code:
+			    draw_sharp(piano_keys[key_A], color_press);
 			    action = play_note(PHASE_A_sharp, action); 
+			    draw_sharp(piano_keys[key_A], GL_BLACK); 
 			    break; 
 		    case B_code: 
+			    draw_middle_key(piano_keys[key_B], color_press, LEFT_KEY); 
 			    action = play_note(PHASE_B, action); 
+			    draw_middle_key(piano_keys[key_B], GL_WHITE, LEFT_KEY); 
 			    break; 
 		    case C_code: 
+			    draw_middle_key(piano_keys[key_C], color_press, RIGHT_KEY); 
 			    action = play_note(PHASE_C, action);
+			    draw_middle_key(piano_keys[key_C], GL_WHITE, RIGHT_KEY); 
 			    break;
 		    case Csharp_code: 
+			    draw_sharp(piano_keys[key_C], color_press); 
 			    action = play_note(PHASE_C_sharp, action); 
+			    draw_sharp(piano_keys[key_C], GL_BLACK); 
 			    break; 
 		    case D_code: 
+			    draw_middle_key(piano_keys[key_D], color_press, MIDDLE_KEY); 
 			    action = play_note(PHASE_D, action); 
+			    draw_middle_key(piano_keys[key_D], GL_WHITE, MIDDLE_KEY);
 			    break; 
 		    case Dsharp_code: 
+			    draw_sharp(piano_keys[key_D], color_press); 
 			    action = play_note(PHASE_D_sharp, action); 
+			    draw_sharp(piano_keys[key_D], GL_BLACK); 
 			    break; 
 		    case E_code: 
+			    draw_middle_key(piano_keys[key_E], color_press, LEFT_KEY); 
 			    action = play_note(PHASE_E, action); 
+			    draw_middle_key(piano_keys[key_E], GL_WHITE, LEFT_KEY); 
 			    break;
 		    case F_code: 
+			    draw_middle_key(piano_keys[key_F], color_press, RIGHT_KEY); 
 			    action = play_note(PHASE_F, action); 
+			    draw_middle_key(piano_keys[key_F], GL_WHITE, RIGHT_KEY);
 			    break; 
 		    case Fsharp_code: 
+			    draw_sharp(piano_keys[key_F], color_press);
 			    action = play_note(PHASE_F_sharp, action); 
+			    draw_sharp(piano_keys[key_F], GL_BLACK); 
 			    break; 
-		    case G_code: 
+		    case G_code:
+			    draw_middle_key(piano_keys[key_G], color_press, MIDDLE_KEY); 
 			    action = play_note(PHASE_G, action); 
+			    draw_middle_key(piano_keys[key_G], GL_WHITE, MIDDLE_KEY); 
 			    break; 
 		    case Gsharp_code: 
+			    draw_sharp(piano_keys[key_G], color_press); 
 			    action = play_note(PHASE_G_sharp, action); 
+			    draw_sharp(piano_keys[key_G], GL_BLACK); 
 			    break; 
 	    } 	    
     } 
