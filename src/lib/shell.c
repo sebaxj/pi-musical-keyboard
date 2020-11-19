@@ -72,20 +72,20 @@ enum PHASE_CONSTANTS {
  * Note G# is representedd by the scancode 0x5B (]})
  */
 enum musical_keys{ 
-	A_code = 0x15, 
-	Asharp_code = 0x1d, 
-	B_code = 0x24,
-	C_code = 0x2d, 
-	Csharp_code = 0x2c, 
-	D_code = 0x35,
-	Dsharp_code = 0x3c, 
-	E_code = 0x43, 
-	F_code = 0x44, 
-	Fsharp_code = 0x4d,
-	G_code = 0x54,
-	Gsharp_code = 0x5b,
-	Aupper_code = 0x0d, // tab key 
-    	CHANGE_INTS = 0x1A,
+	A_code = 0x0d, // tab
+	Asharp_code = 0x15, // Q
+	B_code = 0x1d,
+	C_code = 0x24, 
+	Csharp_code = 0x2d, 
+	D_code = 0x2c,
+	Dsharp_code = 0x35, 
+	E_code = 0x3c, 
+	F_code = 0x43, 
+	Fsharp_code = 0x44,
+	G_code = 0x4d,
+	Gsharp_code = 0x54,
+	Aupper_code = 0x5b,  
+    	CHANGE_INTS = 0x1A, // Z 
 };
 
 static formatted_fn_t shell_printf;
