@@ -58,6 +58,9 @@ meet quickly. I'm afraid my code might be unclear in some parts.
 - Also, in the graphic keyboard, I put the A from the other octave because I think it's esthetically nicer , but it's 
 not yet implemented in the shell (no key associated, and no phase yet). 
 
+=> Sebastian (WEDNESDAY)
+- See merge notes, and notes in slack.
+
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
  - use keyboard driver to initiate notes (shell.c for now). 
