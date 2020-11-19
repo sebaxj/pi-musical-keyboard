@@ -14,7 +14,7 @@ static unsigned DATA = GPIO_PIN4;
 
 static unsigned int MODIFIERS = 0; 
 
-#define RESET 0
+#define RESET 1
 enum { 
 	START_BIT = 0,
 	END_BIT = 1,

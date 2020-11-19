@@ -61,6 +61,7 @@ enum PHASE_CONSTANTS {
     PHASE_F_sharp = 0b10100001101001110010000011, 
     PHASE_G = 0b10101011010000111110011000,
     PHASE_G_sharp = 0b10110101011100110001001111,
+    PHASE_A_upper = 0b11000000001111010010101010,
 };
 
 /* i
@@ -83,7 +84,8 @@ enum musical_keys{
 	Fsharp_code = 0x4d,
 	G_code = 0x54,
 	Gsharp_code = 0x5b,
-    CHANGE_INTS = 0x1A,
+	Aupper_code = 0x0d, // tab key 
+    	CHANGE_INTS = 0x1A,
 };
 
 static formatted_fn_t shell_printf;
@@ -132,7 +134,7 @@ static const command_t commands[] = {
 static key_action_t play_note(unsigned phase, key_action_t action){ 
 	timer_delay_ms(400); // almost resolves the cutting issue at the beginning, if we delay more it's even better but it makes the keyboard asynchronous with the sound. 
 	while (action.what == KEY_PRESS) { 
-        audio_write_i16(AKWF_violin_0001, phase, 1); 
+        	audio_write_i16(AKWF_violin_0001, phase, 1); 
 		action = keyboard_read_sequence(); 
 	} 
 	return action; 
@@ -206,6 +208,11 @@ static int cmd_music(int argc, const char *argv[]) {
 			    action = play_note(PHASE_G_sharp, action); 
 			    draw_sharp(piano_keys[key_G], GL_BLACK); 
 			    break;
+		    case Aupper_code: 
+			    draw_middle_key(piano_keys[key_A_upper], color_press, MIDDLE_KEY); 
+			    action = play_note(PHASE_A_upper, action); 
+			    draw_middle_key(piano_keys[key_A_upper], GL_WHITE, MIDDLE_KEY); 
+			    break; 
             case CHANGE_INTS:
                 // prompt user
                 // evaluate response

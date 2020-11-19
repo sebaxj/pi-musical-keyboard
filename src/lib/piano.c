@@ -27,7 +27,7 @@ void piano_init(unsigned int nrows, unsigned int ncols) {
 void draw_piano(void) {
 	console_clear(); 
 	console_printf("Use Keys 'Q' through ']' to play the piano.\n");
-    console_printf("Press ESC to return to console, or 'Z' to choose instrument\n"); 
+    	console_printf("Press ESC to return to console, or 'Z' to choose instrument\n"); 
     
 	// draw white keys 
 	gl_draw_rect(piano.piano_start_x, piano.piano_start_y, piano.piano_width, piano.piano_height, GL_WHITE); 
@@ -64,7 +64,7 @@ void draw_middle_key(int x, color_t color, enum state key){ // surrounded by sha
 	gl_draw_rect(x, piano.piano_start_y + piano.black_key_height, piano.white_key_width, piano.piano_height - piano.black_key_height, color);
 
 	// draw the borders of the note 
-    gl_draw_vertical_line(x, piano.piano_start_y, piano.piano_height, GL_BLACK); 	
+        gl_draw_vertical_line(x, piano.piano_start_y, piano.piano_height, GL_BLACK); 	
 	gl_draw_vertical_line(x + piano.white_key_width, piano.piano_start_y, piano.piano_height, GL_BLACK); 
 } 
 
