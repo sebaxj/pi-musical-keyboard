@@ -11,6 +11,15 @@
 #include <stdint.h> 
 #include "printf.h"
 #include "gl.h"
+#include "piano.h"
+
+/* Include Instrument Waveform header files */
+#include "AKWF_ebass.h"
+#include "AKWF_eguitar.h"
+#include "AKWF_eorgan.h"
+#include "AKWF_hvoice.h"
+#include "AKWF_piano.h"
+#include "AKWF_violin.h"
 
 /**********************
  * shell.c module
@@ -25,7 +34,6 @@
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define ESC_SCANCODE 0x76
-#define TESTING_MODE 1
 
 /*
  * C compilation macros
@@ -74,7 +82,8 @@ enum musical_keys{
 	F_code = 0x44, 
 	Fsharp_code = 0x4d,
 	G_code = 0x54,
-	Gsharp_code = 0x5b
+	Gsharp_code = 0x5b,
+    CHANGE_INTS = 0x1A,
 };
 
 static formatted_fn_t shell_printf;
@@ -120,23 +129,19 @@ static const command_t commands[] = {
     {"music", "This command turns the keyboard into a musical keyboard", cmd_music} 
 };
 
-#if TESTING_MODE
-#include "sin8.h"
 static key_action_t play_note(unsigned phase, key_action_t action){ 
 	timer_delay_ms(400); // almost resolves the cutting issue at the beginning, if we delay more it's even better but it makes the keyboard asynchronous with the sound. 
 	while (action.what == KEY_PRESS) { 
-		audio_write_u8(sinewave, phase, 1); 
+        audio_write_i16(AKWF_violin_0001, phase, 1); 
 		action = keyboard_read_sequence(); 
 	} 
 	return action; 
 } 
-#endif
 
 static color_t color_press = GL_MAGENTA; 
 
-static int cmd_music(int argc, const char *argv[]){ 
+static int cmd_music(int argc, const char *argv[]) { 
     draw_piano();
-    #if TESTING_MODE
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
@@ -200,10 +205,13 @@ static int cmd_music(int argc, const char *argv[]){
 			    draw_sharp(piano_keys[key_G], color_press); 
 			    action = play_note(PHASE_G_sharp, action); 
 			    draw_sharp(piano_keys[key_G], GL_BLACK); 
-			    break; 
+			    break;
+            case CHANGE_INTS:
+                // prompt user
+                // evaluate response
+                break; 
 	    } 	    
     } 
-    #endif
     console_clear();
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
     return 0; 

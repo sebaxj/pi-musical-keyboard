@@ -9,8 +9,6 @@
 #include "pi.h"
 #include "shell.h"
 
-
-
 #define ESC_SCANCODE 0x76
 #define ENTER_SCANCODE 0x5A
 #define PHASE (99 << 18)
@@ -43,9 +41,9 @@ enum musical_keys{
 	F_code = 0x44, 
 	Fsharp_code = 0x4d,
 	G_code = 0x54,
-	Gsharp_code = 0x5b
+	Gsharp_code = 0x5b,
+    CHANGE_INTS = 0x1A,
 };
-
 
 static void test_audio_write_u8_scale(void) {
     // play A major scale with 1 sec intervals
@@ -69,7 +67,6 @@ static void test_audio_write_u8_scale(void) {
     timer_delay(1);
 }
 
-
 static key_action_t play_note(unsigned phase, key_action_t action){ 
 	while (action.what == KEY_PRESS) { 
 		audio_write_u8(sinewave, phase, 1); 
@@ -78,61 +75,61 @@ static key_action_t play_note(unsigned phase, key_action_t action){
 	return action; 
 } 
 
-
 static void test_audio_write_u8_key(void) {
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
-      printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
+        printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
 	    switch(action.keycode) { 
 		    case A_code:
 		    	action = play_note(PHASE_A, action); 
-				  break; 
+				break; 
 		    case Asharp_code:
-				  action = play_note(PHASE_A_sharp, action); 
-			    	break; 
+				action = play_note(PHASE_A_sharp, action); 
+			    break; 
 		    case B_code: 
-				  action = play_note(PHASE_B, action); 
-			    	break; 
+				action = play_note(PHASE_B, action); 
+			    break; 
 		    case C_code: 
-				  action = play_note(PHASE_C, action); 
-			    	break;
+				action = play_note(PHASE_C, action); 
+			    break;
 		    case Csharp_code: 
-				  action = play_note(PHASE_C_sharp, action);
+				action = play_note(PHASE_C_sharp, action);
 				break; 
 		    case D_code: 
-				  action = play_note(PHASE_D, action); 
-			    	break; 
+				action = play_note(PHASE_D, action); 
+			    break; 
 		    case Dsharp_code: 
-				  action = play_note(PHASE_D_sharp, action); 
-			    	break; 
+				action = play_note(PHASE_D_sharp, action); 
+			    break; 
 		    case E_code: 
-				  action = play_note(PHASE_E, action); 
-			    	break;
+				action = play_note(PHASE_E, action); 
+			    break;
 		    case F_code: 
-				  action = play_note(PHASE_F, action); 
-			    	break; 
+				action = play_note(PHASE_F, action); 
+			    break; 
 		    case Fsharp_code: 
-				  action = play_note(PHASE_F_sharp, action); 
-			    	break; 
+				action = play_note(PHASE_F_sharp, action); 
+			    break; 
 		    case G_code: 
-				  action = play_note(PHASE_G, action); 
-			    	break; 
+				action = play_note(PHASE_G, action); 
+			    break; 
 		    case Gsharp_code: 
-				  action = play_note(PHASE_G_sharp, action);
-			    	break; 
+				action = play_note(PHASE_G_sharp, action);
+			    break; 
 	    } 	
     }
 }
 
-
 void main(void) {
+
+    // initialize modules
     uart_init();
     audio_init();
     interrupts_init();
-    gpio_init(); // needed for Isma's keyboard to work 
+    gpio_init();
     keyboard_init(KEYBOARD_CLOCK, KEYBOARD_DATA);
-    interrupts_global_enable(); // needed for Isma's keyboard module to work 
+    interrupts_global_enable();
 
     /* AUDIO MODULE */
     printf("*** AUDIO MODULE ***\n\n");
@@ -143,15 +140,10 @@ void main(void) {
     printf("Testing Key Press: Press ESC to quit\n\n");
     test_audio_write_u8_key();
 
-    #if 0
     /* SHELL MODULE */
     printf("\nTesting Shell Module with 'printf\n\n'");
     shell_init(printf); 
     shell_run();
-
-    /* GRAPHICS MODULE */
-    printf("Testing Graphics Display: C Major Scale");
-    #endif
 
     printf("All done!\n");
     printf("Pi rebooting...\nSee ya back at the bootloader!");

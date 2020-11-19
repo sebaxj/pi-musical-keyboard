@@ -1,6 +1,6 @@
 # TODO: replace `<your-project-moduleN>` with the modules that you implement for
 # your project.
-MY_MODULES = console.o fb.o gl.o shell.o audio.o timer.o printf.o gpio.o strings.o backtrace.o malloc.o keyboard.o gpio_interrupts.o interrupts_asm.o bits_asm.o
+MY_MODULES = console.o fb.o gl.o shell.o audio.o timer.o printf.o gpio.o strings.o backtrace.o malloc.o keyboard.o gpio_interrupts.o interrupts_asm.o bits_asm.o piano.o
 
 # Paths to binariesi.
 # TODO: replace `<your-project-app>` with the name of your project's

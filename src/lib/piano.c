@@ -2,17 +2,6 @@
 #include "console.h"
 #include "gl.h"
 
-static struct piano_console {
-    unsigned int width_console = 0;
-    unsigned int height_console = 0;
-    unsigned int piano_width = 0;
-    unsigned int piano_start_y = 0;
-    unsigned int piano_start_x = 0;
-    unsigned int piano_height = 0;
-    unsigned int white_key_width = 0;
-    unsigned int black_key_width = 0;
-}
-
 static struct piano_console piano;
 void draw_middle_key(int x, color_t color, enum state key); 
 void draw_sharp(int x, color_t color); 
@@ -23,9 +12,9 @@ void piano_init(unsigned int nrows, unsigned int ncols) {
 
     // initialize piano graphic
 	piano.piano_width = piano.width_console*9/10;
-	piano.piano_start_y = gl_get_char_height() + piano.height_console * 5/100; 
+	piano.piano_start_y = 3 * gl_get_char_height() + piano.height_console * 5/100; 
 	piano.piano_start_x = piano.width_console*5/100; 
-	piano.piano_height = (my_console.n_rows - 3) * gl_get_char_height(); 
+	piano.piano_height = (nrows - 3) * gl_get_char_height(); 
 	piano.white_key_width = piano.piano_width/8; 
 	piano.black_key_height = 3*piano.piano_height/5;
 	piano.black_key_width = 2*piano.white_key_width/3;
@@ -37,7 +26,7 @@ void piano_init(unsigned int nrows, unsigned int ncols) {
 
 void draw_piano(void) {
 	console_clear(); 
-	console_printf("Welcome to the piano keyboard. Use Keys 'Q' through ']' to play the piano\n");
+	console_printf("Use Keys 'Q' through ']' to play the piano.\n");
     console_printf("Press ESC to return to console, or 'Z' to choose instrument\n"); 
     
 	// draw white keys 
