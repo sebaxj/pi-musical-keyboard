@@ -4,7 +4,6 @@
 #include "printf.h"
 #include "filters.h"
 #include "pwm.h"
-#include "keyboard.h"
 
 /*
  * 				  AUDIO.C
@@ -125,10 +124,6 @@ void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t acti
 	} 
 } 
 */
-
-
-
-
 
 void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int duration) 
 {

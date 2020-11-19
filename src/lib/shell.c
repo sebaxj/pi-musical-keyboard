@@ -135,8 +135,7 @@ static key_action_t play_note(unsigned phase, key_action_t action){
 static color_t color_press = GL_MAGENTA; 
 
 static int cmd_music(int argc, const char *argv[]){ 
-    //shell_printf("Welcome to the Keyboard Piano.\n");
-    draw_piano(); // from console.c
+    draw_piano();
     #if TESTING_MODE
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
@@ -205,6 +204,7 @@ static int cmd_music(int argc, const char *argv[]){
 	    } 	    
     } 
     #endif
+    console_clear();
     shell_printf("Welcome to the CS107E shell. Remember to type on your PS/2 keyboard!\n");
     return 0; 
 } 

@@ -182,7 +182,7 @@ void initialize(void){
 } 
 */
 
-void draw_piano(void){
+void draw_piano(void) {
 	console_clear(); 
 	console_printf("Welcome to the piano keyboard. Have fun!\n"); 
 
@@ -237,7 +237,7 @@ void draw_middle_key(int x, color_t color, enum state key){ // surrounded by sha
 	gl_draw_rect(x, piano_start_y + black_key_height, white_key_width, piano_height - black_key_height, color);
 
 	// draw the borders of the note 
-        gl_draw_vertical_line(x, piano_start_y, piano_height, GL_BLACK); 	
+    gl_draw_vertical_line(x, piano_start_y, piano_height, GL_BLACK); 	
 	gl_draw_vertical_line(x + white_key_width, piano_start_y, piano_height, GL_BLACK); 
 } 
 
