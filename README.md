@@ -56,10 +56,18 @@ trade-off here (at least the best I could find).
 functions in gl.h should be in console.h but i haven't really checked that yet). If you want any clarification, we can 
 meet quickly. I'm afraid my code might be unclear in some parts. 
 - Also, in the graphic keyboard, I put the A from the other octave because I think it's esthetically nicer , but it's 
-not yet implemented in the shell (no key associated, and no phase yet). DONE => changed the key mapping. 
+not yet implemented in the shell (no key associated, and no phase yet). DONE => CHANGED THE KEY MAPPING in shell.c 
 
 => Sebastian (WEDNESDAY)
 - See merge notes, and notes in slack.
+
+=> Isma (Thursday) 
+- associated the upper A. I changed the key mapping (look at the table below). 
+- some small changes (added the handling of the upper A key, and height of the piano so that it doesn't go out of bounds 
+now that we've added the first lines of explanation). 
+- I'm thinking of implementing a pop-up message when someone presses a key that's not one of the musical keys. I'll do that 
+after you finish your changes with the instruments. btw tell me if you need any help with that if it takes too much time. 
+- notes in slack. 
 
 FILE STRUCTURE: app is musical_ps2_keyboard.c
  - use audio driver to control audio output with PWN through audio jack
