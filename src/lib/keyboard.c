@@ -1,5 +1,3 @@
-// Isma's 
-
 #include "gpio.h"
 #include "printf.h"
 #include "uart.h"

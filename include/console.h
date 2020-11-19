@@ -43,9 +43,4 @@ void console_clear(void);
  */
 int console_printf(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 
-// TODO: define the following:
-void draw_piano(void);
-void draw_middle_key(int x, color_t color, enum state key);
-void draw_sharp(int x, color_t color);
-
 #endif

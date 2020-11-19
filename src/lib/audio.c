@@ -92,38 +92,12 @@ void audio_write_u8(const uint8_t waveform[], unsigned dphase, unsigned int dura
         if (!(status & PWM_FULL1)) {
             unsigned angle = phase >> 24;
             uint8_t pcm = waveform[angle];
-            pwm_write( pcm ); // output to channel 0
-            pwm_write( pcm ); // output to channel 1
+            pwm_write(pcm); // output to channel 0
+            pwm_write(pcm); // output to channel 1
             phase += dphase; 
         }
     }
 }
-
-
-/*
-void audio_write_u8(const uint8_t waveform[], unsigned dphase, key_action_t action){
-	unsigned phase = 0; 
-	//unsigned char start_scancode = action.keycode;
-	//unsigned int status = (action.what == KEY_PRESS) ? 1 : 0;  
-	while (1) { 
-		unsigned status = pwm_get_status(); 
-		if (!(status & PWM_FULL1)){
-			unsigned angle = phase >> 24; 
-			uint8_t pcm = waveform[angle]; 
-			pwm_write(pcm); // output to channel 0 
-			pwm_write(pcm); // output to channel 1
-			phase += dphase; 
-		} 
-		action = keyboard_read_sequence(); 
-                //printf("%s [%02x]\n", action.what == KEY_PRESS ? "Press" : "Release", action.keycode);
-		if (action.what == KEY_RELEASE) { 
-			printf("end"); 
-			break; 
-		} 
-
-	} 
-} 
-*/
 
 void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int duration) 
 {
@@ -134,8 +108,8 @@ void audio_write_u16(const uint16_t waveform[], unsigned dphase, unsigned int du
         if (!(status & PWM_FULL1)) {
             unsigned angle = phase >> 24;
             uint8_t pcm = waveform[angle] >> 8;
-            pwm_write( pcm ); // output to channel 0
-            pwm_write( pcm ); // output to channel 1
+            pwm_write(pcm); // output to channel 0
+            pwm_write(pcm); // output to channel 1
             phase += dphase; 
         }
     }
@@ -150,9 +124,9 @@ void audio_write_i16(const int16_t waveform[], unsigned dphase, unsigned int dur
         if (!(status & PWM_FULL1)) {
             unsigned angle = phase >> 24;
             unsigned wave = waveform[angle] - INT16_MIN;
-            uint8_t pcm = wave>>8;
-            pwm_write( pcm ); // output to channel 0
-            pwm_write( pcm ); // output to channel 1
+            uint8_t pcm = wave >> 8;
+            pwm_write(pcm); // output to channel 0
+            pwm_write(pcm); // output to channel 1
             phase += dphase; 
         }
     }
@@ -167,7 +141,7 @@ void audio_send_filter(unsigned (*function)(void)) {
     while(1) {
       int status =  pwm_get_status();
       if (!(status & PWM_FULL1)) {
-	    pwm_write(read>>RIGHTSHIFT);
+	    pwm_write(read >> RIGHTSHIFT);
 	    read = function();
       }
     }
@@ -181,7 +155,7 @@ void audio_send_waveform(unsigned * (*function)(unsigned length), unsigned sampl
   while(i < samples) {
     int status = pwm_get_status();
     if(!(status & PWM_FULL1)) {
-      pwm_write(read>>RIGHTSHIFT);
+      pwm_write(read >> RIGHTSHIFT);
       read = toPlay[++i];
     }
   }
