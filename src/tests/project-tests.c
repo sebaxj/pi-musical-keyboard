@@ -68,8 +68,9 @@ static void test_audio_write_u8_scale(void) {
 }
 
 static key_action_t play_note(unsigned phase, key_action_t action){ 
+	timer_delay_ms(400); // almost resolves the cutting issue at the beginning, if we delay more it's even better but it makes the keyboard asynchronous with the sound. 
 	while (action.what == KEY_PRESS) { 
-		audio_write_u8(sinewave, phase, 1); 
+        audio_write_u8(sinewave, phase, 1); 
 		action = keyboard_read_sequence(); 
 	} 
 	return action; 
