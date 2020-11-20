@@ -2,9 +2,12 @@
 #include "console.h"
 #include "gl.h"
 
+/* 
+ * Authors: Isma Lemhadri, Sebastian James 
+ * Date: 20/11/2020
+ */ 
+
 static struct piano_console piano;
-void draw_middle_key(int x, color_t color, enum state key); 
-void draw_sharp(int x, color_t color); 
 
 void piano_init(unsigned int nrows, unsigned int ncols) {
     piano.width_console = ncols * gl_get_char_width();
@@ -52,7 +55,7 @@ void draw_piano(void) {
 	gl_draw_rect(piano.piano_start_x + 7*piano.white_key_width + 2*piano.white_key_width/3, piano.piano_start_y, piano.black_key_width/2, piano.black_key_height, GL_BLACK); 
 }
 
-void draw_middle_key(int x, color_t color, enum state key){ // surrounded by sharps 
+void draw_middle_key(int x, color_t color, enum state key){ // white key surrounded by sharps 
 	// figure out what type of note it is 
 	if (key == 0) { // sharp to the left and to the right 
 		gl_draw_rect(x + piano.white_key_width/3, piano.piano_start_y, piano.white_key_width/3, piano.black_key_height, color); 
@@ -71,4 +74,4 @@ void draw_middle_key(int x, color_t color, enum state key){ // surrounded by sha
 void draw_sharp(int x, color_t color) // x is the start x coordinate of the white corresponding key (A for A_sharp)
 { 
 	gl_draw_rect(x + 2*piano.white_key_width/3, piano.piano_start_y, piano.black_key_width, piano.black_key_height, color); 
-} 
+}
