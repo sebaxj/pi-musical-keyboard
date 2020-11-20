@@ -1,4 +1,5 @@
 # slemhadri-sebaxj-project
+![keyboard](Graphics.jpg)
 
 FILE STRUCTURE: 
 - app is musical_ps2_keyboard.c
