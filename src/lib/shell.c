@@ -174,6 +174,7 @@ static int evaluate_instrument(const char *line) {
     }
     if(cmd_result) {
         shell_printf("error: no such instrument '%s'\n", line);
+	timer_delay(3); 
     }
 
     return cmd_result; 
