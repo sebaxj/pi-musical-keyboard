@@ -48,7 +48,7 @@ Sebastian Xavier James - Isma Lemhadri
 We aim to make a musical piano keyboard, where we could play the 12 keys of one octave on specific keys of the keyboard. We extended the CS107E shell adding a `music` command which boots the console into a piano graphical interface, and interprets certain keystrokes as piano keys, playing sounds according to which instrument synth the user chooses. The program returns to normal shell function with the 'ESC' key, and a instrument synth can be choosen using the 'Z' key.
 
 ## Member contribution
-Generally equally contributed to writing code and testing. Isma wrote most of the code for the piano module and the shell loop. Sebastian wrote most of the code for the testing application, and audio module, and the instrument selection. Code was writted back and forth on shared github repo and all modules compiled in the Makefile are from our previous assignments.
+Generally equally contributed to writing code and testing. Isma wrote most of the code for the piano module and the shell loop. Sebastian wrote most of the code for the testing application, and audio module, and the instrument selection. Code was written back and forth on shared github repo and all modules compiled in the Makefile are from our previous assignments.
 
 ## References
 
