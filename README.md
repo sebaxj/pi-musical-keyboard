@@ -66,5 +66,3 @@ https://www.exploringbinary.com/binary-converter/
 
   The time difference (6 hours) helped contribute to a continous coding and testing process, with one group member picking up in their morning where the other left off in their evening. Regular Zoom meetings and continuous updates via a Slack channel and the README file in the repo helped enhance communication and coordination.
 
-## Photos
-You are encouraged to submit photos/videos of your project in action. Add the files and commit to your project repository to include along with your submission.
