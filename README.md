@@ -12,7 +12,7 @@ FILE STRUCTURE:
 - `make install` builds the application, boots shell from console on Pi.
 - `make test` compiles testing module, boots shell in terminal.
 
-How to play different notes: 
+How to play different notes: (Thanks Liana for helping us understand!) 
 - Figure out the frequency for each note. 
 - Solve for x : Frequency = x.(9,600,000/ (256 * 256))
 - Convert the x in a binary fraction
