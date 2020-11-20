@@ -15,12 +15,6 @@ struct piano_console {
     unsigned int black_key_height;
 };
 
-// const char ebass[] = "electric bass";
-// const char eguitar[] = "electric guitar";
-// const char eorgan[] = "organ";
-// const char voice[] = "vocals";
-// const char apiano[] = "piano";
-// const char violin[] = "violin";
 
 // TODO: write API for the following sections
 void piano_init(unsigned int nrows, unsigned int ncols);

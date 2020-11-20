@@ -42,7 +42,7 @@ enum musical_keys{
 	Fsharp_code = 0x4d,
 	G_code = 0x54,
 	Gsharp_code = 0x5b,
-    CHANGE_INTS = 0x1A,
+  CHANGE_INTS = 0x1A,
 };
 
 static void test_audio_write_u8_scale(void) {

@@ -22,18 +22,25 @@
 #include "AKWF_violin.h"
 
 /**********************
- * shell.c module
+ * shell.c module with an added musical keyboard 
  * 
- * Desc
+ * Written by Sebastian James and Isma Lemhadri 
+ * 11/20/2020
  * 
  * ********************/
 
 /*
- * Constants
+ * Constants, Globals, and Statics
  */
 #define LINE_LEN 160
 #define ENTER_SCANCODE 0x5A
 #define ESC_SCANCODE 0x76
+
+static const int16_t *inst_wav[256];
+static color_t color_press = GL_MAGENTA;
+
+// Array to store instrument names 
+const char *instruments[] = {"electric bass", "electric guitar", "organ", "vocals", "piano", "violin"}; 
 
 /*
  * C compilation macros
@@ -64,14 +71,14 @@ enum PHASE_CONSTANTS {
     PHASE_A_upper = 0b11000000001111010010101010,
 };
 
-/* i
+/* 
  * enum to map keyboard scancode to music note
  * 
  * '0x' represents hexadecimal number.
  * Note A is represented by the scancode 0x15 (Q),
  * Note G# is representedd by the scancode 0x5B (]})
  */
-enum musical_keys{ 
+enum musical_keys { 
 	A_code = 0x0d, // tab
 	Asharp_code = 0x15, // Q
 	B_code = 0x1d,
@@ -131,19 +138,59 @@ static const command_t commands[] = {
     {"music", "This command turns the keyboard into a musical keyboard", cmd_music} 
 };
 
+static int evaluate_instrument(const char *line) {
+    // parse argument
+    int cmd_result = 1;
+    for(int i = 0; i < sizeof(instruments); i++) {
+        if(strcmp(line, instruments[i]) == 0) {
+            switch (i) {
+            case 0: // electric bass
+                *inst_wav = AKWF_ebass_0001;
+		cmd_result = 0; 
+                break;
+            case 1: // electric guitar
+                *inst_wav = AKWF_eguitar_0001;
+		cmd_result = 0; 
+                break;
+            case 2: // organ
+                *inst_wav = AKWF_eorgan_0001;
+		printf("organ time!"); 
+		cmd_result = 0; 
+                break;
+            case 3: // vocals
+                *inst_wav = AKWF_hvoice_0001;
+		cmd_result = 0; 
+                break;
+            case 4: // piano
+                *inst_wav = AKWF_piano_0001;
+		cmd_result = 0; 
+                break;
+            case 5: // violin
+                *inst_wav = AKWF_violin_0001;
+		cmd_result = 0; 
+                break;
+            }
+        }
+    }
+    if(cmd_result) {
+        shell_printf("error: no such instrument '%s'\n", line);
+    }
+
+    return cmd_result; 
+}
+
 static key_action_t play_note(unsigned phase, key_action_t action){ 
-	timer_delay_ms(400); // almost resolves the cutting issue at the beginning, if we delay more it's even better but it makes the keyboard asynchronous with the sound. 
+	timer_delay_ms(400); // trade-off to resolve the cutting issue for held_down keys 
 	while (action.what == KEY_PRESS) { 
-        	audio_write_i16(AKWF_violin_0001, phase, 1); 
+        	audio_write_i16(*inst_wav, phase, 1); 
 		action = keyboard_read_sequence(); 
 	} 
 	return action; 
 } 
 
-static color_t color_press = GL_MAGENTA; 
-
 static int cmd_music(int argc, const char *argv[]) { 
     draw_piano();
+    *inst_wav = AKWF_piano_0001; // initialized with piano default
     while (1) { 
 	    key_action_t action = keyboard_read_sequence();
 	    if (action.keycode == ESC_SCANCODE) break;
@@ -209,14 +256,29 @@ static int cmd_music(int argc, const char *argv[]) {
 			    draw_sharp(piano_keys[key_G], GL_BLACK); 
 			    break;
 		    case Aupper_code: 
-			    draw_middle_key(piano_keys[key_A_upper], color_press, MIDDLE_KEY); 
-			    action = play_note(PHASE_A_upper, action); 
-			    draw_middle_key(piano_keys[key_A_upper], GL_WHITE, MIDDLE_KEY); 
+			     draw_middle_key(piano_keys[key_A_upper], color_press, MIDDLE_KEY); 
+			     action = play_note(PHASE_A_upper, action); 
+			     draw_middle_key(piano_keys[key_A_upper], GL_WHITE, MIDDLE_KEY); 
+			     break; 
+            	    case CHANGE_INTS:
+                	    console_clear();
+                	    char line[LINE_LEN];
+                	    shell_printf("Instrument Sound Library:\nPress 'Q' to exit selection.\n");
+
+                	    for(int i = 0; i < (sizeof(instruments) / sizeof(*instruments)); i++) {
+                    		shell_printf("> %s\n", instruments[i]);
+                	    }
+
+                	    shell_printf("Please type instrument> ");
+                	    shell_readline(line, sizeof(line));
+                	    if(line[0] == 'Q' || line[0] == 'q') {
+                    		draw_piano();
+                    		break;
+                	    }
+			    printf("%s\n", line); 
+                	    evaluate_instrument(line);
+			    draw_piano(); 
 			    break; 
-            case CHANGE_INTS:
-                // prompt user
-                // evaluate response
-                break; 
 	    } 	    
     } 
     console_clear();
