@@ -38,7 +38,8 @@ How to play different notes:
 
 # CS107E Evaluation:
 
-## Project title
+## Project title 
+Musical Shell and keyboard 
 
 ## Team members
 Sebastian Xavier James - Isma Lemhadri 
