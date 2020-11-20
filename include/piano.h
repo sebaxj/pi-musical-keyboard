@@ -15,8 +15,6 @@ struct piano_console {
     unsigned int black_key_height;
 };
 
-// Array to store instrument names.
-const char *instruments[] = {"electric bass", "electric guitar", "organ", "vocals", "piano", "violin"};
 
 // TODO: write API for the following sections
 void piano_init(unsigned int nrows, unsigned int ncols);
