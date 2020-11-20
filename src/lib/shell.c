@@ -275,7 +275,6 @@ static int cmd_music(int argc, const char *argv[]) {
                     		draw_piano();
                     		break;
                 	    }
-			    printf("%s\n", line); 
                 	    evaluate_instrument(line);
 			    draw_piano(); 
 			    break; 
