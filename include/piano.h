@@ -8,6 +8,28 @@
  * Date: 20/11/2020
  */
 
+/* 
+ * Describes the state of a white key: 
+ * - MIDDLE_KEY for keys surrounded by sharps
+ * - RIGHT_KEY for keys with only a sharp to the right 
+ * - LEFT_KEY for keys with only a sharp to the left 
+ */
+enum state { MIDDLE_KEY, RIGHT_KEY, LEFT_KEY}; 
+
+int piano_keys[8]; 
+
+enum piano_keys_x{
+	key_A, 
+	key_B, 
+	key_C, 
+	key_D, 
+	key_E, 
+	key_F, 
+	key_G, 
+	key_A_upper,
+}; 
+
+
 struct piano_console {
     unsigned int width_console;
     unsigned int height_console;
