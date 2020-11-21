@@ -1,4 +1,4 @@
-# slemhadri-sebaxj-project
+# Bare Metal Musical Keyboard on the Raspberry Pi
 ![keyboard](Graphics.jpg)
 
 FILE STRUCTURE: 
@@ -34,37 +34,4 @@ How to play different notes: (Thanks Liana for helping us understand!)
 | [{       | 0x54     | G#        | 415.305        | 2.8351488   | 10.110101011100110001001111 |
 | ]}       | 0x5b     | A_upper   | 440.000        | 3.0037333   | 11.000000001111010010101010 | 
 
-*********************************
-
-# CS107E Evaluation:
-
-## Project title 
-Musical Shell and keyboard 
-
-## Team members
-Sebastian Xavier James - Isma Lemhadri 
-
-## Project description
-We aim to make a musical piano keyboard, where we could play the 12 keys of one octave on specific keys of the keyboard. We extended the CS107E shell adding a `music` command which boots the console into a piano graphical interface, and interprets certain keystrokes as piano keys, playing sounds according to which instrument synth the user chooses. The program returns to normal shell function with the 'ESC' key, and a instrument synth can be choosen using the 'Z' key.
-
-## Member contribution
-Generally equally contributed to writing code and testing. Isma wrote most of the code for the piano module and the shell loop. Sebastian wrote most of the code for the testing application, and audio module, and the instrument selection. Code was written back and forth on shared github repo and all modules compiled in the Makefile are from our previous assignments.
-
-## References
-
-CS107e/extra: audio.c
-- Code was based on this file and edited to fit our needs.
-
-CS107E/examples playwav play.c
-- General structure to play sound through headphone jack on the Pi was used form this project.
-
-Instrument header arrays were taken from AKWF2Teensy - Beerware by Datanoise.net, published opensource on Github.
-
-https://www.exploringbinary.com/binary-converter/
-- Online calculator used for binary phase conversions, see table above. For size of frequency integers, using a calculator made more sense than calculating it by hand.
-
-## Self-evaluation
-  We were able to reach our initial milestones of generating sound out through the pi when initiated from a keystroke. We were able to extend upon our intial proposal by adding support for different instrument synth sounds.
-
-  The time difference (6 hours) helped contribute to a continous coding and testing process, with one group member picking up in their morning where the other left off in their evening. Regular Zoom meetings and continuous updates via a Slack channel and the README file in the repo helped enhance communication and coordination.
 
